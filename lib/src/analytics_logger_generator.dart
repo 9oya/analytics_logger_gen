@@ -57,24 +57,21 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     // enum AnalyticsEvents
     buffer.writeln('enum AnalyticsEvents {');
     for (int i = 0; i < bodyRows.length; i++) {
-      for (int j = 0; j < headerRows.length; j++) {
-        buffer.writeln('// ${bodyRows[i][headerRows[j]]},');
-        if (j == 0) {
-          String? snakeCaseName =
-              bodyRows[i][headerRows[j]]!.toString().toSnakeCase();
-          String? camelCaseName = snakeCaseName.toCamelCase();
-          String hasFirebase = firebaseAnalytics ? 'true' : 'false';
-          String hasAppsflyer = appsflyer ? 'true' : 'false';
-          String hasAmplitude = amplitude ? 'true' : 'false';
-          String hasMixpanel = mixpanel ? 'true' : 'false';
-          String hasSingular = singular ? 'true' : 'false';
-          String hasDataDog = dataDog ? 'true' : 'false';
-          buffer.writeln(
-              '$camelCaseName(\'$snakeCaseName\', $hasFirebase, $hasAppsflyer, $hasAmplitude, $hasMixpanel, $hasSingular, $hasDataDog),');
-          if (i == bodyRows.length - 1) {
-            buffer.writeln(';');
-          }
-        }
+      String? snakeCaseName =
+          bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
+      String? camelCaseName = snakeCaseName.toCamelCase();
+      String hasFirebase = firebaseAnalytics ? 'true' : 'false';
+      String hasAppsflyer = appsflyer ? 'true' : 'false';
+      String hasAmplitude = amplitude ? 'true' : 'false';
+      String hasMixpanel = mixpanel ? 'true' : 'false';
+      String hasSingular = singular ? 'true' : 'false';
+      String hasDataDog = dataDog ? 'true' : 'false';
+      String outputLine =
+          '$camelCaseName(\'$snakeCaseName\', $hasFirebase, $hasAppsflyer, $hasAmplitude, $hasMixpanel, $hasSingular, $hasDataDog)';
+      if (i < bodyRows.length - 1) {
+        buffer.writeln('$outputLine,');
+      } else {
+        buffer.writeln('$outputLine;');
       }
     }
     buffer.writeln(
