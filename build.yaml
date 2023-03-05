@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      analytics_logger|analytics_logger_gen:
+        enabled: true
+
+builders:
+  analytics_logger_gen:
+    target: ":analytics_logger_gen"
+    import: "package:analytics_logger_gen/builder.dart"
+    builder_factories: ["analyticsLoggerGenerator"]
+    build_extensions: {".dart": [".analytics_logger_gen.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
