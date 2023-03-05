@@ -5,6 +5,7 @@ import 'package:build/src/builder/build_step.dart';
 import 'package:csv/csv.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:http/http.dart' as http;
+import 'package:change_case/change_case.dart';
 
 import '../analytics_logger_gen.dart';
 
@@ -59,10 +60,33 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       for (int j = 0; j < headerRows.length; j++) {
         buffer.writeln('// ${bodyRows[i][headerRows[j]]},');
         if (j == 0) {
-          buffer.writeln('${bodyRows[i][headerRows[j]]},');
+          String? snakeCaseName =
+              bodyRows[i][headerRows[j]]!.toString().toSnakeCase();
+          String? camelCaseName = snakeCaseName.toCamelCase();
+          String hasFirebase = firebaseAnalytics ? 'true' : 'false';
+          String hasAppsflyer = appsflyer ? 'true' : 'false';
+          String hasAmplitude = amplitude ? 'true' : 'false';
+          String hasMixpanel = mixpanel ? 'true' : 'false';
+          String hasSingular = singular ? 'true' : 'false';
+          String hasDataDog = dataDog ? 'true' : 'false';
+          buffer.writeln(
+              '$camelCaseName(\'$snakeCaseName\', $hasFirebase, $hasAppsflyer, $hasAmplitude, $hasMixpanel, $hasSingular, $hasDataDog),');
+          if (i == bodyRows.length - 1) {
+            buffer.writeln(';');
+          }
         }
       }
     }
+    buffer.writeln(
+        'const AnalyticsEvents(this.name, this.hasFirebase, this.hasAppsflyer, this.hasAmplitude, this.hasMixpanel, this.hasSingular, this.hasDataDog);');
+
+    buffer.writeln('final String name;');
+    buffer.writeln('final bool hasFirebase;');
+    buffer.writeln('final bool hasAppsflyer;');
+    buffer.writeln('final bool hasAmplitude;');
+    buffer.writeln('final bool hasMixpanel;');
+    buffer.writeln('final bool hasSingular;');
+    buffer.writeln('final bool hasDataDog;');
     buffer.writeln('}');
 
     // class AnalyticsEventsProvider
