@@ -17,14 +17,14 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     final name = element.displayName.replaceAll('_', '');
 
     final String remoteCsvUrl = annotation.read('remoteCsvUrl').stringValue;
-    final bool firebaseAnalytics =
-        annotation.read('firebaseAnalytics').boolValue;
+    final bool hasFirebaseAnalytics =
+        annotation.read('hasFirebaseAnalytics').boolValue;
     // TODO(eido9oy): Add support for other analytics providers
     // final bool appsflyer = annotation.read('appsflyer').boolValue;
     // final bool amplitude = annotation.read('amplitude').boolValue;
     // final bool mixpanel = annotation.read('mixpanel').boolValue;
-    final bool singular = annotation.read('singular').boolValue;
-    final bool dataDog = annotation.read('dataDog').boolValue;
+    final bool hasSingular = annotation.read('hasSingular').boolValue;
+    final bool hasDataDog = annotation.read('hasDataDog').boolValue;
 
     List<String> headerRows = <String>[];
     List<Map<String, dynamic>> bodyRows = <Map<String, dynamic>>[];
@@ -55,21 +55,25 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     // enum AnalyticsEvents
     buffer.writeln('enum AnalyticsEvents {');
     for (int i = 0; i < bodyRows.length; i++) {
-      String? snakeCaseName =
+      String? _eventSnakeCase =
           bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
-      String? camelCaseName = snakeCaseName.toCamelCase();
-      String hasFirebase = bodyRows[i][headerRows[2]] == 'TRUE' ? 'true' : 'false';
+      String? camelCaseName = _eventSnakeCase.toCamelCase();
       // TODO(eido9oy): Add support for other analytics providers
-      // String hasAppsflyer = appsflyer ? 'true' : 'false';
-      // String hasAmplitude = amplitude ? 'true' : 'false';
-      // String hasMixpanel = mixpanel ? 'true' : 'false';
-      String hasSingular = bodyRows[i][headerRows[3]] == 'TRUE' ? 'true' : 'false';
-      String hasDataDog = bodyRows[i][headerRows[4]] == 'TRUE' ? 'true' : 'false';
-      // TODO(eido9oy): Add support for other analytics providers
-      // String outputLine =
-      //     '$camelCaseName(\'$snakeCaseName\', $hasFirebase, $hasAppsflyer, $hasAmplitude, $hasMixpanel, $hasSingular, $hasDataDog)';
       String outputLine =
-          '$camelCaseName(\'$snakeCaseName\', $hasFirebase, $hasSingular, $hasDataDog)';
+          '$camelCaseName(\'$_eventSnakeCase\'';
+      if (hasFirebaseAnalytics) {
+        String _enableFirebase = bodyRows[i][headerRows[2]] == 'TRUE' ? 'true' : 'false';
+        outputLine += ', $_enableFirebase';
+      }
+      if (hasSingular) {
+        String _enableSingular = bodyRows[i][headerRows[3]] == 'TRUE' ? 'true' : 'false';
+        outputLine += ', $_enableSingular';
+      }
+      if (hasDataDog) {
+        String _enableDataDog = bodyRows[i][headerRows[4]] == 'TRUE' ? 'true' : 'false';
+        outputLine += ', $_enableDataDog';
+      }
+      outputLine += ')';
       if (i < bodyRows.length - 1) {
         buffer.writeln('$outputLine,');
       } else {
@@ -77,18 +81,29 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       }
     }
     // TODO(eido9oy): Add support for other analytics providers
-    // buffer.writeln(
-    //     'const AnalyticsEvents(this.name, this.hasFirebase, this.hasAppsflyer, this.hasAmplitude, this.hasMixpanel, this.hasSingular, this.hasDataDog);');
     buffer.writeln(
-        'const AnalyticsEvents(this.name, this.hasFirebase, this.hasSingular, this.hasDataDog);');
+        'const AnalyticsEvents(this.name');
+    if (hasFirebaseAnalytics) {
+      buffer.writeln(', this.hasFirebase');
+    }
+    if (hasSingular) {
+      buffer.writeln(', this.hasSingular');
+    }
+    if (hasDataDog) {
+      buffer.writeln(', this.hasDataDog');
+    }
+    buffer.writeln(');');
+
     buffer.writeln('final String name;');
-    buffer.writeln('final bool hasFirebase;');
-    // TODO(eido9oy): Add support for other analytics providers
-    // buffer.writeln('final bool hasAppsflyer;');
-    // buffer.writeln('final bool hasAmplitude;');
-    // buffer.writeln('final bool hasMixpanel;');
-    buffer.writeln('final bool hasSingular;');
-    buffer.writeln('final bool hasDataDog;');
+    if (hasFirebaseAnalytics) {
+      buffer.writeln('final bool hasFirebase;');
+    }
+    if (hasSingular) {
+      buffer.writeln('final bool hasSingular;');
+    }
+    if (hasDataDog) {
+      buffer.writeln('final bool hasDataDog;');
+    }
     buffer.writeln('}');
 
     // class AnalyticsEventsProvider
@@ -140,15 +155,17 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('}');
 
     // FirebaseLogger
-    buffer.writeln('class FirebaseLogger extends EventLogger {');
-    buffer.writeln('FirebaseLogger({required this.firebase});');
-    buffer.writeln('final FirebaseAnalytics firebase;');
-    buffer.writeln('@override');
-    buffer.writeln(
-        'void logEvent(String event, {required Map<String, dynamic> attributes}) {');
-    buffer.writeln('firebase.logEvent(name: event, parameters: attributes);');
-    buffer.writeln('}');
-    buffer.writeln('}');
+    if (hasFirebaseAnalytics) {
+      buffer.writeln('class FirebaseLogger extends EventLogger {');
+      buffer.writeln('FirebaseLogger({required this.firebase});');
+      buffer.writeln('final FirebaseAnalytics firebase;');
+      buffer.writeln('@override');
+      buffer.writeln(
+          'void logEvent(String event, {required Map<String, dynamic> attributes}) {');
+      buffer.writeln('firebase.logEvent(name: event, parameters: attributes);');
+      buffer.writeln('}');
+      buffer.writeln('}');
+    }
 
     // TODO(eido9oy): Add support for other analytics providers
     // AppsFlyerLogger
@@ -164,51 +181,64 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     // buffer.writeln('}');
 
     // SingularLogger
-    buffer.writeln('class SingularLogger extends EventLogger {');
-    buffer.writeln('SingularLogger();');
-    buffer.writeln('@override');
-    buffer.writeln(
-        'void logEvent(String event, {required Map<String, dynamic> attributes}) {');
-    buffer.writeln('Singular.eventWithArgs(event, attributes);');
-    buffer.writeln('}');
-    buffer.writeln('}');
+    if (hasSingular) {
+      buffer.writeln('class SingularLogger extends EventLogger {');
+      buffer.writeln('SingularLogger();');
+      buffer.writeln('@override');
+      buffer.writeln(
+          'void logEvent(String event, {required Map<String, dynamic> attributes}) {');
+      buffer.writeln('Singular.eventWithArgs(event, attributes);');
+      buffer.writeln('}');
+      buffer.writeln('}');
+    }
 
     // DataDogLogger
-    buffer.writeln('class DataDogLogger extends EventLogger {');
-    buffer.writeln('DataDogLogger({required this.dataDog});');
-    buffer.writeln('final DatadogSdk dataDog;');
-    buffer.writeln('@override');
-    buffer.writeln(
-        'void logEvent(String event, {required Map<String, dynamic> attributes}) {');
-    buffer.writeln('dataDog.logs?.info(event, attributes: attributes.cast<String, String>());');
-    buffer.writeln('}');
-    buffer.writeln('}');
+    if (hasDataDog) {
+      buffer.writeln('class DataDogLogger extends EventLogger {');
+      buffer.writeln('DataDogLogger({required this.dataDog});');
+      buffer.writeln('final DatadogSdk dataDog;');
+      buffer.writeln('@override');
+      buffer.writeln(
+          'void logEvent(String event, {required Map<String, dynamic> attributes}) {');
+      buffer.writeln('dataDog.logs?.info(event, attributes: attributes.cast<String, String>());');
+      buffer.writeln('}');
+      buffer.writeln('}');
+    }
 
     //class CustomAnalyticsLogger
     buffer.writeln('class $name {');
     buffer.writeln('$name._();');
-    buffer.writeln(
-        'static final EventLogger firebaseLogger = FirebaseLogger(firebase: FirebaseAnalytics.instance);');
-    buffer
-        .writeln('static final EventLogger singularLogger = SingularLogger();');
-    buffer.writeln('static final EventLogger dataDogLogger = DataDogLogger(dataDog: DatadogSdk.instance);');
+    if (hasFirebaseAnalytics) {
+      buffer.writeln(
+          'static final EventLogger firebaseLogger = FirebaseLogger(firebase: FirebaseAnalytics.instance);');
+    }
+    if (hasSingular) {
+      buffer.writeln('static final EventLogger singularLogger = SingularLogger();');
+    }
+    if (hasDataDog) {
+      buffer.writeln('static final EventLogger dataDogLogger = DataDogLogger(dataDog: DatadogSdk.instance);');
+    }
 
     buffer.writeln(
         'static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {');
-    buffer.writeln('if (event.hasFirebase) {');
-    buffer.writeln(
-        'firebaseLogger.logEvent(event.name, attributes: attributes);');
-    buffer.writeln('}');
-
-    buffer.writeln('if (event.hasSingular) {');
-    buffer.writeln(
-        'singularLogger.logEvent(event.name, attributes: attributes);');
-    buffer.writeln('}');
-
-    buffer.writeln('if (event.hasDataDog) {');
-    buffer.writeln(
-        'dataDogLogger.logEvent(event.name, attributes: attributes);');
-    buffer.writeln('}');
+    if (hasFirebaseAnalytics) {
+      buffer.writeln('if (event.hasFirebase) {');
+      buffer.writeln(
+          'firebaseLogger.logEvent(event.name, attributes: attributes);');
+      buffer.writeln('}');
+    }
+    if (hasSingular) {
+      buffer.writeln('if (event.hasSingular) {');
+      buffer.writeln(
+          'singularLogger.logEvent(event.name, attributes: attributes);');
+      buffer.writeln('}');
+    }
+    if (hasDataDog) {
+      buffer.writeln('if (event.hasDataDog) {');
+      buffer.writeln(
+          'dataDogLogger.logEvent(event.name, attributes: attributes);');
+      buffer.writeln('}');
+    }
 
     buffer.writeln('}');
     buffer.writeln('}');
