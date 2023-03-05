@@ -7,24 +7,18 @@ part of 'analytics_logger.dart';
 // **************************************************************************
 
 enum AnalyticsEvents {
-  appStarted('app_started', true, true, true, true, true, true),
-  homePageEntered('home_page_entered', true, true, true, true, true, true),
-  myPageEntered('my_page_entered', true, true, true, true, true, true),
-  appEnded('app_ended', true, true, true, true, true, true),
-  homeBottomButtonClicked(
-      'home_bottom_button_clicked', true, true, true, true, true, true),
-  mySendMessageClicked(
-      'my_send_message_clicked', true, true, true, true, true, true),
-  homeBannerButtonClicked(
-      'home_banner_button_clicked', true, true, true, true, true, true);
+  appStarted('app_started', true, true, true),
+  homePageEntered('home_page_entered', true, true, true),
+  myPageEntered('my_page_entered', true, true, true),
+  appEnded('app_ended', true, true, true),
+  homeBottomButtonClicked('home_bottom_button_clicked', true, true, true),
+  mySendMessageClicked('my_send_message_clicked', true, true, true),
+  homeBannerButtonClicked('home_banner_button_clicked', true, true, true);
 
-  const AnalyticsEvents(this.name, this.hasFirebase, this.hasAppsflyer,
-      this.hasAmplitude, this.hasMixpanel, this.hasSingular, this.hasDataDog);
+  const AnalyticsEvents(
+      this.name, this.hasFirebase, this.hasSingular, this.hasDataDog);
   final String name;
   final bool hasFirebase;
-  final bool hasAppsflyer;
-  final bool hasAmplitude;
-  final bool hasMixpanel;
   final bool hasSingular;
   final bool hasDataDog;
 }
@@ -85,18 +79,52 @@ class AnalyticsEventsProvider {
   }
 }
 
-abstract class EventLogger {}
+abstract class EventLogger {
+  void logEvent(String event, {required Map<String, dynamic> attributes});
+}
 
-class FirebaseLogger extends EventLogger {}
+class FirebaseLogger extends EventLogger {
+  FirebaseLogger({required this.firebase});
+  final FirebaseAnalytics firebase;
+  @override
+  void logEvent(String event, {required Map<String, dynamic> attributes}) {
+    firebase.logEvent(name: event, parameters: attributes);
+  }
+}
 
-class AppsFlyerLogger extends EventLogger {}
+class SingularLogger extends EventLogger {
+  SingularLogger();
+  @override
+  void logEvent(String event, {required Map<String, dynamic> attributes}) {
+    Singular.eventWithArgs(event, attributes);
+  }
+}
 
-class AmplitudeLogger extends EventLogger {}
+class DataDogLogger extends EventLogger {
+  DataDogLogger({required this.dataDog});
+  final DatadogSdk dataDog;
+  @override
+  void logEvent(String event, {required Map<String, dynamic> attributes}) {
+    dataDog.logs?.info(event, attributes: attributes.cast<String, String>());
+  }
+}
 
-class MixpanelLogger extends EventLogger {}
-
-class SingularLogger extends EventLogger {}
-
-class DataDogLogger extends EventLogger {}
-
-class CustomAnalyticsLogger {}
+class CustomAnalyticsLogger {
+  CustomAnalyticsLogger._();
+  static final EventLogger firebaseLogger =
+      FirebaseLogger(firebase: FirebaseAnalytics.instance);
+  static final EventLogger singularLogger = SingularLogger();
+  static final EventLogger dataDogLogger =
+      DataDogLogger(dataDog: DatadogSdk.instance);
+  static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {
+    if (event.hasFirebase) {
+      firebaseLogger.logEvent(event.name, attributes: attributes);
+    }
+    if (event.hasSingular) {
+      singularLogger.logEvent(event.name, attributes: attributes);
+    }
+    if (event.hasDataDog) {
+      dataDogLogger.logEvent(event.name, attributes: attributes);
+    }
+  }
+}
