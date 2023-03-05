@@ -12,5 +12,5 @@ part 'analytics_logger.g.dart';
   singular: true,
   dataDog: true,
 )
-class CustomAnalyticsLogger {}
+class _CustomAnalyticsLogger {}
 
