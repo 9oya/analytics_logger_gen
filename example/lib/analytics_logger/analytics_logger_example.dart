@@ -29,7 +29,7 @@ enum AnalyticsEvents {
 class AnalyticsEventsProvider {
   AnalyticsEventsProvider._();
 
-  static void exampleEvent({String? param1, String? param2}) {
+  static void exampleEvent({dynamic param1, dynamic param2}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'param1': param1,
       'param2': param2,

@@ -76,7 +76,6 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     }
     buffer.writeln(
         'const AnalyticsEvents(this.name, this.hasFirebase, this.hasAppsflyer, this.hasAmplitude, this.hasMixpanel, this.hasSingular, this.hasDataDog);');
-
     buffer.writeln('final String name;');
     buffer.writeln('final bool hasFirebase;');
     buffer.writeln('final bool hasAppsflyer;');
@@ -88,6 +87,44 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
 
     // class AnalyticsEventsProvider
     buffer.writeln('class AnalyticsEventsProvider {');
+    buffer.writeln('AnalyticsEventsProvider._();');
+    for (int i = 0; i < bodyRows.length; i++) {
+      String? eventName =
+          bodyRows[i][headerRows[0]]!.toString().toCamelCase();
+      String params = '';
+      String paramsDict = '';
+
+      List<String> args = bodyRows[i][headerRows[1]]!.toString().split(',');
+      for (int j = 0; j < args.length; j++) {
+        String? paramName = args[j].toCamelCase();
+        if (paramName.isEmpty) {
+          if (j > 0) {
+            params += '}';
+          }
+          break;
+        }
+        if (j == 0) {
+          params += '{';
+        }
+        if (paramName.isEmpty) {
+          break;
+        }
+        params += 'dynamic $paramName';
+        if (j < args.length - 1) {
+          params += ', ';
+        } else {
+          params += '}';
+        }
+
+        paramsDict += '\'$paramName\': $paramName,';
+      }
+      buffer.writeln('static void $eventName($params) {');
+      buffer.writeln('Map<String, dynamic> attributes = <String, dynamic>{');
+      buffer.writeln(paramsDict);
+      buffer.writeln('};');
+      buffer.writeln('CustomAnalyticsLogger.logEvent(AnalyticsEvents.$eventName, attributes);');
+      buffer.writeln('}');
+    }
     buffer.writeln('}');
 
     // abstract class EventLogger
