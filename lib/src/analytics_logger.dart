@@ -1,7 +1,6 @@
-/// Annotation to enable analytics logger
+/// Annotation to generate analytics logger
 class AnalyticsLogger {
-  final String localCsvPath;
-  final String remoteCsvPath;
+  final String remoteCsvUrl;
   final bool firebaseAnalytics;
   // final bool appsflyer;
   // final bool amplitude;
@@ -10,8 +9,7 @@ class AnalyticsLogger {
   final bool dataDog;
 
   const AnalyticsLogger({
-    this.localCsvPath = '',
-    this.remoteCsvPath = '',
+    this.remoteCsvUrl = '',
     this.firebaseAnalytics = false,
     // this.appsflyer = false,
     // this.amplitude = false,

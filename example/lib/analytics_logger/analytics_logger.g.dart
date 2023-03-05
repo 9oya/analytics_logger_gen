@@ -8,11 +8,11 @@ part of 'analytics_logger.dart';
 
 enum AnalyticsEvents {
   appStarted('app_started', true, true, true),
-  homePageEntered('home_page_entered', true, true, true),
+  homePageEntered('home_page_entered', true, false, true),
   myPageEntered('my_page_entered', true, true, true),
-  appEnded('app_ended', true, true, true),
+  appEnded('app_ended', true, true, false),
   homeBottomButtonClicked('home_bottom_button_clicked', true, true, true),
-  mySendMessageClicked('my_send_message_clicked', true, true, true),
+  mySendMessageClicked('my_send_message_clicked', false, false, true),
   homeBannerButtonClicked('home_banner_button_clicked', true, true, true);
 
   const AnalyticsEvents(

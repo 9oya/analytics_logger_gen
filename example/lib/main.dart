@@ -16,10 +16,17 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    AnalyticsEventsProvider.appStarted();
     AnalyticsEventsProvider.mySendMessageClicked(
         title: 'hello', message: 'world');
     AnalyticsEventsProvider.homeBottomButtonClicked(
         a: 'a', b: 'b', c: 'c', d: 'd');
+  }
+
+  @override
+  void dispose() {
+    AnalyticsEventsProvider.appEnded();
+    super.dispose();
   }
 
   @override

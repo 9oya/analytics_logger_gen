@@ -16,8 +16,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     final buffer = StringBuffer();
     final name = element.displayName.replaceAll('_', '');
 
-    final String localCsvPath = annotation.read('localCsvPath').stringValue;
-    final String remoteCsvPath = annotation.read('remoteCsvPath').stringValue;
+    final String remoteCsvUrl = annotation.read('remoteCsvUrl').stringValue;
     final bool firebaseAnalytics =
         annotation.read('firebaseAnalytics').boolValue;
     // TODO(eido9oy): Add support for other analytics providers
@@ -35,9 +34,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
         'Content-Type': 'text/csv; charset=utf-8',
         'Accept': '*/*'
       };
-      Uri uri = localCsvPath.isNotEmpty
-          ? Uri.parse(localCsvPath)
-          : Uri.parse(remoteCsvPath);
+      Uri uri = Uri.parse(remoteCsvUrl);
       final response = await http.get(uri, headers: headers);
       if (response.statusCode == 200) {
         List<List<dynamic>> allRows =
@@ -61,13 +58,13 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       String? snakeCaseName =
           bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
       String? camelCaseName = snakeCaseName.toCamelCase();
-      String hasFirebase = firebaseAnalytics ? 'true' : 'false';
+      String hasFirebase = bodyRows[i][headerRows[2]] == 'TRUE' ? 'true' : 'false';
       // TODO(eido9oy): Add support for other analytics providers
       // String hasAppsflyer = appsflyer ? 'true' : 'false';
       // String hasAmplitude = amplitude ? 'true' : 'false';
       // String hasMixpanel = mixpanel ? 'true' : 'false';
-      String hasSingular = singular ? 'true' : 'false';
-      String hasDataDog = dataDog ? 'true' : 'false';
+      String hasSingular = bodyRows[i][headerRows[3]] == 'TRUE' ? 'true' : 'false';
+      String hasDataDog = bodyRows[i][headerRows[4]] == 'TRUE' ? 'true' : 'false';
       // TODO(eido9oy): Add support for other analytics providers
       // String outputLine =
       //     '$camelCaseName(\'$snakeCaseName\', $hasFirebase, $hasAppsflyer, $hasAmplitude, $hasMixpanel, $hasSingular, $hasDataDog)';
