@@ -137,74 +137,10 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       buffer.writeln('}');
     }
     buffer.writeln('}');
-    //
-    // // abstract class EventLogger
-    // buffer.writeln('abstract class EventLogger {');
-    // buffer.writeln('void logEvent(String event, {required Map<String, dynamic> attributes});');
-    // buffer.writeln('}');
-    //
-    // // FirebaseLogger
-    // if (hasFirebaseAnalytics) {
-    //   buffer.writeln('class FirebaseLogger extends EventLogger {');
-    //   buffer.writeln('FirebaseLogger({required this.firebase});');
-    //   buffer.writeln('final FirebaseAnalytics firebase;');
-    //   buffer.writeln('@override');
-    //   buffer.writeln('void logEvent(String event, {required Map<String, dynamic> attributes}) {');
-    //   buffer.writeln('firebase.logEvent(name: event, parameters: attributes);');
-    //   buffer.writeln('}');
-    //   buffer.writeln('}');
-    // }
-    //
-    // // TODO(eido9oy): Add support for other analytics providers
-    // // AppsFlyerLogger
-    // // buffer.writeln('class AppsFlyerLogger extends EventLogger {');
-    // // buffer.writeln('}');
-    //
-    // // AmplitudeLogger
-    // // buffer.writeln('class AmplitudeLogger extends EventLogger {');
-    // // buffer.writeln('}');
-    //
-    // // MixpanelLogger
-    // // buffer.writeln('class MixpanelLogger extends EventLogger {');
-    // // buffer.writeln('}');
-    //
-    // // SingularLogger
-    // if (hasSingular) {
-    //   buffer.writeln('class SingularLogger extends EventLogger {');
-    //   buffer.writeln('SingularLogger();');
-    //   buffer.writeln('@override');
-    //   buffer.writeln('void logEvent(String event, {required Map<String, dynamic> attributes}) {');
-    //   buffer.writeln('Singular.eventWithArgs(event, attributes);');
-    //   buffer.writeln('}');
-    //   buffer.writeln('}');
-    // }
-    //
-    // // DataDogLogger
-    // if (hasDataDog) {
-    //   buffer.writeln('class DataDogLogger extends EventLogger {');
-    //   buffer.writeln('DataDogLogger({required this.dataDog});');
-    //   buffer.writeln('final DatadogSdk dataDog;');
-    //   buffer.writeln('@override');
-    //   buffer.writeln('void logEvent(String event, {required Map<String, dynamic> attributes}) {');
-    //   buffer.writeln('dataDog.logs?.info(event, attributes: attributes.cast<String, String>());');
-    //   buffer.writeln('}');
-    //   buffer.writeln('}');
-    // }
 
     //class CustomAnalyticsLogger
     buffer.writeln('class $name {');
     buffer.writeln('$name._();');
-    // if (hasFirebaseAnalytics) {
-    //       buffer.writeln(
-    //       'static final EventLogger firebaseLogger = FirebaseLogger(firebase: FirebaseAnalytics.instance);');
-    // }
-    // if (hasSingular) {
-    //   buffer.writeln('static final EventLogger singularLogger = SingularLogger();');
-    // }
-    // if (hasDataDog) {
-    //   buffer.writeln(
-    //       'static final EventLogger dataDogLogger = DataDogLogger(dataDog: DatadogSdk.instance);');
-    // }
 
     for (String loggerName in loggers.values) {
       buffer.writeln(
@@ -213,21 +149,6 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
 
     buffer
         .writeln('static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {');
-    // if (hasFirebaseAnalytics) {
-    //   buffer.writeln('if (event.hasFirebase) {');
-    //   buffer.writeln('firebaseLogger.logEvent(event.name, attributes: attributes);');
-    //   buffer.writeln('}');
-    // }
-    // if (hasSingular) {
-    //   buffer.writeln('if (event.hasSingular) {');
-    //   buffer.writeln('singularLogger.logEvent(event.name, attributes: attributes);');
-    //   buffer.writeln('}');
-    // }
-    // if (hasDataDog) {
-    //   buffer.writeln('if (event.hasDataDog) {');
-    //   buffer.writeln('dataDogLogger.logEvent(event.name, attributes: attributes);');
-    //   buffer.writeln('}');
-    // }
 
     for (String loggerKey in loggers.keys) {
       String loggerName = loggers[loggerKey]!;
