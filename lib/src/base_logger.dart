@@ -1,7 +1,7 @@
 
-abstract class BaseLogger {
+abstract class EventLogger {
 
-  const BaseLogger();
+  const EventLogger();
 
   void logEvent(String event, {required Map<String, dynamic> attributes});
 }

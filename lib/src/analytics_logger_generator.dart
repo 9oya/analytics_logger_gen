@@ -56,13 +56,11 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     for (int i = 0; i < bodyRows.length; i++) {
       String? _eventSnakeCase = bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
       String? camelCaseName = _eventSnakeCase.toCamelCase();
-      // TODO(eido9oy): Add support for other analytics providers
       String outputLine = '$camelCaseName(\'$_eventSnakeCase\'';
 
       List<String> outputValues = [];
       // Find logger separator row index in headerRows and get value
       for(String loggerSeparatorKey in loggers.keys) {
-        print('headerRows : $headerRows');
         int row = headerRows.indexOf(loggerSeparatorKey);
         String? _enable = bodyRows[i][headerRows[row]] == 'TRUE' ? 'true' : 'false';
         outputValues.add(_enable);
@@ -82,9 +80,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
         buffer.writeln('$outputLine;');
       }
 
-      print('outputLine : $outputLine');
     }
-    // TODO(eido9oy): Add support for other analytics providers
     buffer.writeln('const AnalyticsEvents(this.name');
     for(String loggerSeparatorKey in loggers.keys) {
       buffer.writeln(', this.${loggerSeparatorKey}');
