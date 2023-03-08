@@ -7,19 +7,17 @@ part of 'analytics_logger.dart';
 // **************************************************************************
 
 enum AnalyticsEvents {
-  appStarted('app_started', true, true, true),
-  homePageEntered('home_page_entered', true, false, true),
-  myPageEntered('my_page_entered', true, true, true),
-  appEnded('app_ended', true, true, false),
-  homeBottomButtonClicked('home_bottom_button_clicked', true, true, true),
-  mySendMessageClicked('my_send_message_clicked', false, false, true),
-  homeBannerButtonClicked('home_banner_button_clicked', true, true, true);
+  appStarted('app_started', true, true),
+  homePageEntered('home_page_entered', true, true),
+  myPageEntered('my_page_entered', true, true),
+  appEnded('app_ended', true, false),
+  homeBottomButtonClicked('home_bottom_button_clicked', true, true),
+  mySendMessageClicked('my_send_message_clicked', false, true),
+  homeBannerButtonClicked('home_banner_button_clicked', true, true);
 
-  const AnalyticsEvents(
-      this.name, this.hasFirebase, this.hasSingular, this.hasDataDog);
+  const AnalyticsEvents(this.name, this.enableFirebase, this.hasDataDog);
   final String name;
-  final bool hasFirebase;
-  final bool hasSingular;
+  final bool enableFirebase;
   final bool hasDataDog;
 }
 
@@ -79,52 +77,17 @@ class AnalyticsEventsProvider {
   }
 }
 
-abstract class EventLogger {
-  void logEvent(String event, {required Map<String, dynamic> attributes});
-}
-
-class FirebaseLogger extends EventLogger {
-  FirebaseLogger({required this.firebase});
-  final FirebaseAnalytics firebase;
-  @override
-  void logEvent(String event, {required Map<String, dynamic> attributes}) {
-    firebase.logEvent(name: event, parameters: attributes);
-  }
-}
-
-class SingularLogger extends EventLogger {
-  SingularLogger();
-  @override
-  void logEvent(String event, {required Map<String, dynamic> attributes}) {
-    Singular.eventWithArgs(event, attributes);
-  }
-}
-
-class DataDogLogger extends EventLogger {
-  DataDogLogger({required this.dataDog});
-  final DatadogSdk dataDog;
-  @override
-  void logEvent(String event, {required Map<String, dynamic> attributes}) {
-    dataDog.logs?.info(event, attributes: attributes.cast<String, String>());
-  }
-}
-
 class CustomAnalyticsLogger {
   CustomAnalyticsLogger._();
-  static final EventLogger firebaseLogger =
-      FirebaseLogger(firebase: FirebaseAnalytics.instance);
-  static final EventLogger singularLogger = SingularLogger();
-  static final EventLogger dataDogLogger =
-      DataDogLogger(dataDog: DatadogSdk.instance);
+  static FirebaseAnalyticsLogger firebaseAnalyticsLogger =
+      const FirebaseAnalyticsLogger();
+  static DatadogDebugLogger datadogDebugLogger = const DatadogDebugLogger();
   static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {
-    if (event.hasFirebase) {
-      firebaseLogger.logEvent(event.name, attributes: attributes);
-    }
-    if (event.hasSingular) {
-      singularLogger.logEvent(event.name, attributes: attributes);
+    if (event.enableFirebase) {
+      firebaseAnalyticsLogger.logEvent(event.name, attributes: attributes);
     }
     if (event.hasDataDog) {
-      dataDogLogger.logEvent(event.name, attributes: attributes);
+      datadogDebugLogger.logEvent(event.name, attributes: attributes);
     }
   }
 }
