@@ -14,23 +14,36 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
   FutureOr<String> generateForAnnotatedElement(
       Element element, ConstantReader annotation, BuildStep buildStep) async {
     final buffer = StringBuffer();
-    final name = element.displayName.replaceAll('_', '');
-
+    final className = element.displayName.replaceAll('_', '');
     final String remoteCsvUrl = annotation.read('remoteCsvUrl').stringValue;
-    final Map<String, String> loggers = annotation.read('loggers').mapValue.map<String, String>(
-        (k, v) => MapEntry<String, String>(
-            k!.toStringValue()!, v!.type!.getDisplayString(withNullability: false)));
+
+    // Set default headers
+    final Map<String, String> httpHeaders = {
+      'Content-Type': 'text/csv; charset=utf-8',
+      'Accept': '*/*'
+    };
+    // Add custom headers
+    annotation.read('httpHeaders').mapValue.forEach((k, v) {
+      httpHeaders[k!.toStringValue()!] = v!.toStringValue()!;
+    });
+
+    final Map<String, String> loggers = annotation
+        .read('loggers')
+        .mapValue
+        .map<String, String>((k, v) => MapEntry<String, String>(
+            k!.toStringValue()!,
+            v!.type!.getDisplayString(withNullability: false)));
 
     List<String> headerRows = <String>[];
     List<Map<String, dynamic>> bodyRows = <Map<String, dynamic>>[];
 
     // Get CSV from remote URL
     try {
-      final headers = {'Content-Type': 'text/csv; charset=utf-8', 'Accept': '*/*'};
       Uri uri = Uri.parse(remoteCsvUrl);
-      final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: httpHeaders);
       if (response.statusCode == 200) {
-        List<List<dynamic>> allRows = const CsvToListConverter().convert<String>(response.body);
+        List<List<dynamic>> allRows =
+            const CsvToListConverter().convert<String>(response.body);
         headerRows = allRows[0] as List<String>;
         bodyRows = allRows.sublist(1, allRows.length).map((List<dynamic> e) {
           Map<String, dynamic> dict = <String, dynamic>{};
@@ -45,24 +58,29 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     }
 
     // Check if headerRows contains logger separator row
-    for(String loggerSeparatorKey in loggers.keys) {
+    for (String loggerSeparatorKey in loggers.keys) {
       if (!headerRows.contains(loggerSeparatorKey)) {
-        throw Exception('Header row does not contain logger separator row: $loggerSeparatorKey');
+        throw Exception(
+            'Header row does not contain logger separator row: $loggerSeparatorKey');
       }
     }
 
     // enum AnalyticsEvents
     buffer.writeln('enum AnalyticsEvents {');
     for (int i = 0; i < bodyRows.length; i++) {
-      String? _eventSnakeCase = bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
-      String? camelCaseName = _eventSnakeCase.toCamelCase();
-      String outputLine = '$camelCaseName(\'$_eventSnakeCase\'';
+      String? _snakeCaseEventName =
+          bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
+      String? _camelCaseEventName = _snakeCaseEventName.toCamelCase();
+      String outputLine = '$_camelCaseEventName(\'$_snakeCaseEventName\'';
 
       List<String> outputValues = [];
       // Find logger separator row index in headerRows and get value
-      for(String loggerSeparatorKey in loggers.keys) {
+      for (String loggerSeparatorKey in loggers.keys) {
         int row = headerRows.indexOf(loggerSeparatorKey);
-        String? _enable = bodyRows[i][headerRows[row]] == 'TRUE' ? 'true' : 'false';
+        String? _enable =
+            (bodyRows[i][headerRows[row]] as String).toUpperCase() == 'TRUE'
+                ? 'true'
+                : 'false';
         outputValues.add(_enable);
       }
 
@@ -79,16 +97,15 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       } else {
         buffer.writeln('$outputLine;');
       }
-
     }
     buffer.writeln('const AnalyticsEvents(this.name');
-    for(String loggerSeparatorKey in loggers.keys) {
+    for (String loggerSeparatorKey in loggers.keys) {
       buffer.writeln(', this.${loggerSeparatorKey}');
     }
     buffer.writeln(');');
 
     buffer.writeln('final String name;');
-    for(String loggerSeparatorKey in loggers.keys) {
+    for (String loggerSeparatorKey in loggers.keys) {
       buffer.writeln('final bool ${loggerSeparatorKey};');
     }
     buffer.writeln('}');
@@ -129,22 +146,22 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       buffer.writeln('Map<String, dynamic> attributes = <String, dynamic>{');
       buffer.writeln(paramsDict);
       buffer.writeln('};');
-      buffer.writeln('CustomAnalyticsLogger.logEvent(AnalyticsEvents.$eventName, attributes);');
+      buffer.writeln('$className.logEvent(AnalyticsEvents.$eventName, attributes);');
       buffer.writeln('}');
     }
     buffer.writeln('}');
 
     //class CustomAnalyticsLogger
-    buffer.writeln('class $name {');
-    buffer.writeln('$name._();');
+    buffer.writeln('class $className {');
+    buffer.writeln('$className._();');
 
     for (String loggerName in loggers.values) {
       buffer.writeln(
           'static ${loggerName} ${loggerName.toLowerFirstCase()} = const ${loggerName}();');
     }
 
-    buffer
-        .writeln('static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {');
+    buffer.writeln(
+        'static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {');
 
     for (String loggerKey in loggers.keys) {
       String loggerName = loggers[loggerKey]!;

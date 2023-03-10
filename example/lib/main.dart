@@ -1,4 +1,4 @@
-import 'package:analytics_logger_gen_example/analytics_logger/analytics_logger.dart';
+import 'package:analytics_logger_gen_example/analytics_logger/from_git_hub_private_repo/analytics_logger_from_private_repo.dart';
 import 'package:flutter/material.dart';
 
 void main() {
