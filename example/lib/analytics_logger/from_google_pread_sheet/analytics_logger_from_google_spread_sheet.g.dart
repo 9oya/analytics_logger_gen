@@ -40,26 +40,27 @@ class AnalyticsEventsProvider {
   AnalyticsEventsProvider._();
   static void appStarted() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CustomAnalyticsLogger.logEvent(AnalyticsEvents.appStarted, attributes);
+    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.appStarted, attributes);
   }
 
   static void homePageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CustomAnalyticsLogger.logEvent(AnalyticsEvents.homePageEntered, attributes);
+    CustomAnalyticsLoggerA.logEvent(
+        AnalyticsEvents.homePageEntered, attributes);
   }
 
   static void myPageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CustomAnalyticsLogger.logEvent(AnalyticsEvents.myPageEntered, attributes);
+    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.myPageEntered, attributes);
   }
 
   static void appEnded() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CustomAnalyticsLogger.logEvent(AnalyticsEvents.appEnded, attributes);
+    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.appEnded, attributes);
   }
 
   static void homeBottomButtonClicked(
@@ -70,7 +71,7 @@ class AnalyticsEventsProvider {
       'c': c,
       'd': d,
     };
-    CustomAnalyticsLogger.logEvent(
+    CustomAnalyticsLoggerA.logEvent(
         AnalyticsEvents.homeBottomButtonClicked, attributes);
   }
 
@@ -79,7 +80,7 @@ class AnalyticsEventsProvider {
       'contentType': contentType,
       'itemId': itemId,
     };
-    CustomAnalyticsLogger.logEvent(AnalyticsEvents.selectContents, attributes);
+    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.selectContents, attributes);
   }
 
   static void mySendMessageClicked({dynamic title, dynamic message}) {
@@ -87,7 +88,7 @@ class AnalyticsEventsProvider {
       'title': title,
       'message': message,
     };
-    CustomAnalyticsLogger.logEvent(
+    CustomAnalyticsLoggerA.logEvent(
         AnalyticsEvents.mySendMessageClicked, attributes);
   }
 
@@ -95,13 +96,13 @@ class AnalyticsEventsProvider {
     Map<String, dynamic> attributes = <String, dynamic>{
       'isAllowed': isAllowed,
     };
-    CustomAnalyticsLogger.logEvent(
+    CustomAnalyticsLoggerA.logEvent(
         AnalyticsEvents.homeBannerButtonClicked, attributes);
   }
 }
 
-class CustomAnalyticsLogger {
-  CustomAnalyticsLogger._();
+class CustomAnalyticsLoggerA {
+  CustomAnalyticsLoggerA._();
   static FirebaseAnalyticsLogger firebaseAnalyticsLogger =
       const FirebaseAnalyticsLogger();
   static AppsFlyerLogger appsFlyerLogger = const AppsFlyerLogger();
