@@ -16,4 +16,4 @@ part 'analytics_logger_from_google_spread_sheet.g.dart';
       'customColumnName4': DatadogDebugLogger(),
     })
 // ignore: unused_element
-class _CustomAnalyticsLogger {}
+class _CustomAnalyticsLoggerA {}
