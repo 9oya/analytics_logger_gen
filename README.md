@@ -53,6 +53,8 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
 | my_send_message_clicked | title, message           | FALSE          | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
 | home_banner_button_clicked | is_allowed            | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
 
+[download csv file](https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv)
+
 ### Prerequisites for the code generator
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
