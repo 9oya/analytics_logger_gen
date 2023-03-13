@@ -12,10 +12,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  analyzer: ^5.0.0
   build: ^2.3.1
   source_gen: ^1.2.7
   http: ^0.13.5
-  path: 1.8.2
+  path: ^1.8.0
   csv: ^5.0.1
   change_case: ^1.1.0
 
