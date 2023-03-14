@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
 import '../event_loggers.dart';
