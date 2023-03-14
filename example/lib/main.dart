@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 
 import 'analytics_logger/from_git_hub_repo/analytics_logger_from_github_repo.dart';
