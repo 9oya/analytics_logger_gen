@@ -5,9 +5,8 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
 import 'package:change_case/change_case.dart';
 import 'package:csv/csv.dart';
-import 'package:source_gen/source_gen.dart';
 import 'package:http/http.dart' as http;
-import 'package:change_case/change_case.dart';
+import 'package:source_gen/source_gen.dart';
 
 import '../analytics_logger_gen.dart';
 
@@ -45,8 +44,8 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       try {
         final Directory current = Directory.current;
         final File input = File('${current.path}/$localCsvPath');
-        List<List<dynamic>> allRows =
-            const CsvToListConverter().convert<String>(input.readAsStringSync());
+        List<List<dynamic>> allRows = const CsvToListConverter()
+            .convert<String>(input.readAsStringSync());
         headerRows = allRows[0] as List<String>;
         bodyRows = allRows.sublist(1, allRows.length).map((List<dynamic> e) {
           Map<String, dynamic> dict = <String, dynamic>{};
