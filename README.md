@@ -2,29 +2,37 @@
 
 [analytics_logger_gen](https://github.com/9oya/analytics_logger_gen) is a Flutter plugin that generates an integrated event logger for analytics tools such as Firebase Analytics, AppsFlyer, Amplitude, MixpanelLogger, Singular and DataDog.
 
-## Installation
-```xml
-dependencies:
-  analytics_logger_gen:
-```
-## Running the code generator
+## Running the generator
 ```shell
 flutter packages pub run build_runner build
+
+# or if you want to delete the generated files before building
+# flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
-## Usage
+## Basic Usage
+The builders generate code when they find members annotated with `@AnalyticsLogger`.
 ```dart
+import 'package:analytics_logger_gen/analytics_logger_gen.dart';
+
+// Building creates the corresponding part 'analytics_logger_from_google_spread_sheet.g.dart'
+part 'analytics_logger_from_google_spread_sheet.g.dart';
+
 @AnalyticsLogger(
-    remoteCsvUrl: '<URL_TO_CSV_FILE>',
+    localCsvPath: '<YOUR-PROJECT-ROOT/PATH-TO-CSV-FILE>',
+    // When you declare the localCsvPath, the remoteCsvUrl is ignored.
+    remoteCsvUrl: '<URL-TO-CSV-FILE>',
+    
     loggers: {
-      // COLUMN_NAME is the name of the column in the CSV file
-      // The value of the COLUMN_NAME should be 'TRUE' or 'FALSE'
-      '<COLUMN_NAME>': SomeAnalyticsLogger(),
+      // COLUMN-NAME is the name of the column in the CSV file
+      // The value of the COLUMN-NAME should be 'TRUE' or 'FALSE'
+      '<COLUMN-NAME>': FirebaseAnalyticsLogger(),
     })
 // The class should be declared private '_' to avoid conflicts with the generated class
 // ignore: unused_element
 class _CustomAnalyticsLogger {}
 
-class SomeAnalyticsLogger extends EventLogger {
+// You can declare any number of loggers for third-party analytics tools.
+class FirebaseAnalyticsLogger extends EventLogger {
   const SomeAnalyticsLogger();
 
   @override
@@ -34,6 +42,7 @@ class SomeAnalyticsLogger extends EventLogger {
 }
 ```
 ## Example
+### Calling the generated code
 ```dart
 AnalyticsEventsProvider.appStarted();
 AnalyticsEventsProvider.mySendMessageClicked(
@@ -42,6 +51,9 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
     a: 'a', b: 'b', c: 'c', d: 'd');
 ```
 ### CSV file
+- The indices of the `event_name` and `arguments` columns cannot be modified; they are fixed at column indices 0 and 1, respectively. (You can change their names, but not their indices.)
+- You can add any number of columns to the right of the `arguments` column. The values of the columns are used to determine whether to call the corresponding analytics tool. The values of the columns should be 'TRUE' or 'FALSE'.
+
 | event_name              | arguments                | enableFirebase | hasAppsFlyer | customColumnName1 | customColumnName2 | customColumnName3 | customColumnName4 | description |
 | -----------------------| ------------------------| -------------- | ------------ | -----------------| -----------------| -----------------| -----------------| ----------- |
 | app_started             |                          | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
@@ -53,7 +65,9 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
 | my_send_message_clicked | title, message           | FALSE          | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
 | home_banner_button_clicked | is_allowed            | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
 
-### Prerequisites for the code generator
+[download example csv file](https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv)
+
+### Prerequisites for running the code generation
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
