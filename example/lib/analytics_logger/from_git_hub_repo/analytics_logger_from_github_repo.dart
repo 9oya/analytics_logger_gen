@@ -6,7 +6,7 @@ part 'analytics_logger_from_github_repo.g.dart';
 
 @AnalyticsLogger(
     remoteCsvUrl:
-    'https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv',
+        'https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv',
     loggers: {
       'enableFirebase': FirebaseAnalyticsLogger(),
       'hasAppsFlyer': AppsFlyerLogger(),
