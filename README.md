@@ -14,7 +14,7 @@ The builders generate code when they find members annotated with `@AnalyticsLogg
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
-// Building creates the corresponding part 'analytics_logger_from_google_spread_sheet.g.dart'
+// Building creates the corresponding part 'analytics_logger.g.dart'
 part 'analytics_logger.g.dart';
 
 @AnalyticsLogger(
