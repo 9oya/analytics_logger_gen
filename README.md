@@ -54,16 +54,16 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
 - The indices of the `event_name` and `arguments` columns cannot be modified; they are fixed at column indices 0 and 1, respectively. (You can change their names, but not their indices.)
 - You can add any number of columns to the right of the `arguments` column. The values of the columns are used to determine whether to call the corresponding analytics tool. The values of the columns should be 'TRUE' or 'FALSE'.
 
-| event_name              | arguments                | enableFirebase | hasAppsFlyer | customColumnName1 | customColumnName2 | customColumnName3 | customColumnName4 | description |
-| -----------------------| ------------------------| -------------- | ------------ | -----------------| -----------------| -----------------| -----------------| ----------- |
-| app_started             |                          | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
-| home_page_entered       | ab_test_case             | TRUE           | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
-| my_page_entered         | ab_test_case             | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
-| app_ended               |                          | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | FALSE            |             |
-| home_bottom_button_clicked | "a, b, c, d"           | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
-| select_contents         | content_type, item_id    | TRUE           | FALSE        | FALSE            | FALSE            | FALSE            | FALSE            |             |
-| my_send_message_clicked | title, message           | FALSE          | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
-| home_banner_button_clicked | is_allowed            | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
+| event_name              | arguments              | enableFirebase | hasAppsFlyer | customColumnName1 | customColumnName2 | customColumnName3 | customColumnName4 | description |
+| -----------------------| ----------------------| -------------- | ------------ | -----------------| -----------------| -----------------| -----------------| ----------- |
+| app_started             |                        | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
+| home_page_entered       | ab_test_case           | TRUE           | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
+| my_page_entered         | ab_test_case           | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
+| app_ended               |                        | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | FALSE            |             |
+| home_bottom_button_clicked | a, b, c, d           | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
+| select_contents         | content_type, item_id  | TRUE           | FALSE        | FALSE            | FALSE            | FALSE            | FALSE            |             |
+| my_send_message_clicked | title, message         | FALSE          | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
+| home_banner_button_clicked | is_allowed           | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
 
 [download example csv file](https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv)
 
