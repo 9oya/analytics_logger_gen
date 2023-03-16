@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:analyzer/dart/element/element.dart';
+
+// ignore_for_file: implementation_imports
 import 'package:build/src/builder/build_step.dart';
 import 'package:change_case/change_case.dart';
 import 'package:csv/csv.dart';
@@ -128,7 +130,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
 
     buffer.writeln('final String name;');
     for (String loggerSeparatorKey in loggers.keys) {
-      buffer.writeln('final bool ${loggerSeparatorKey};');
+      buffer.writeln('final bool $loggerSeparatorKey;');
     }
     buffer.writeln('}');
 
@@ -180,7 +182,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
 
     for (String loggerName in loggers.values) {
       buffer.writeln(
-          'static ${loggerName} ${loggerName.toLowerFirstCase()} = const ${loggerName}();');
+          'static $loggerName ${loggerName.toLowerFirstCase()} = const $loggerName();');
     }
 
     buffer.writeln(
