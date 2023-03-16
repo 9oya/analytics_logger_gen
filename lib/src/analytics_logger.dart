@@ -2,7 +2,6 @@ import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
 /// Annotation to generate analytics logger
 class AnalyticsLogger {
-
   /// When [localCsvPath] is provided, the logger and events will be
   /// generated from the local CSV file.
   /// (When you declare the localCsvPath, the remoteCsvUrl is ignored.)
