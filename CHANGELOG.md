@@ -1,3 +1,7 @@
+## 0.1.0
+* Fix to prevent run-time errors related to dart:mirror when running the Flutter app.
+* Update README.md
+
 ## 0.0.3
 * Update README.md
 * Fix dart analysis issues
