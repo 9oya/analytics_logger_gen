@@ -18,7 +18,8 @@ import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 part 'analytics_logger.g.dart';
 
 @AnalyticsLogger(
-    localCsvPath: '<YOUR-PROJECT-ROOT/PATH-TO-CSV-FILE>',
+    // ex) (from project root)assets/logger_gen_example_sheet.csv
+    localCsvPath: '<PATH-TO-CSV-FILE>',
     // When you declare the localCsvPath, the remoteCsvUrl is ignored.
     remoteCsvUrl: '<URL-TO-CSV-FILE>',
     
@@ -33,7 +34,7 @@ class _CustomAnalyticsLogger {}
 
 // You can declare any number of loggers for third-party analytics tools.
 class FirebaseAnalyticsLogger extends EventLogger {
-  const SomeAnalyticsLogger();
+  const FirebaseAnalyticsLogger();
 
   @override
   void logEvent(String event, {required Map<String, dynamic> attributes}) {
@@ -68,6 +69,26 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
 [download example csv file](https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv)
 
 ### Prerequisites for running the code generation
+#### Local CSV file
+```dart
+import 'package:analytics_logger_gen/analytics_logger_gen.dart';
+
+import '../event_loggers.dart';
+
+part 'analytics_logger_from_local_file.g.dart';
+
+@AnalyticsLogger(localCsvPath: 'assets/logger_gen_example_sheet.csv', loggers: {
+  'enableFirebase': FirebaseAnalyticsLogger(),
+  'hasAppsFlyer': AppsFlyerLogger(),
+  'customColumnName1': AmplitudeLogger(),
+  'customColumnName2': MixpanelLogger(),
+  'customColumnName3': SingularLogger(),
+  'customColumnName4': DatadogDebugLogger(),
+})
+// ignore: unused_element
+class _CustomAnalyticsLoggerC {}
+```
+#### Remote CSV file
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
