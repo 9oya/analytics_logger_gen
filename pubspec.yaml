@@ -1,5 +1,5 @@
 name: analytics_logger_gen
-description: analytics_logger_gen is a Flutter plugin that generates an integrated event logger for analytics tools such as Firebase Analytics, AppsFlyer, DataDog, and Singular.
+description: analytics_logger_gen is a Flutter plugin that generates an integrated event logger for various analytics tools including Firebase, AppsFlyer, Amplitude, Mixpanel, Singular, and DataDog. Import data from Google Spreadsheets, remote repositories, or local CSV files.
 version: 0.1.0
 homepage: https://github.com/9oya
 repository: https://github.com/9oya/analytics_logger_gen
