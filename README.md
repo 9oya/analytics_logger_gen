@@ -168,7 +168,7 @@ class DatadogDebugLogger extends EventLogger {
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'analytics_logger_from_google_spread_sheet.dart';
+part of 'logger_from_google_spread_sheet.dart';
 
 // **************************************************************************
 // AnalyticsLoggerGenerator

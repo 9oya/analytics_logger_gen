@@ -1,9 +1,11 @@
-import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
-/// Annotation to generate analytics logger
+/// The [AnalyticsLogger] annotation is used to generate the logger class.
 class AnalyticsLogger {
   /// When [localCsvPath] is provided, the logger and events will be
   /// generated from the local CSV file.
+  ///
+  /// example: (from project root)assets/logger_gen_example_sheet.csv
+  ///
   /// (When you declare the localCsvPath, the remoteCsvUrl is ignored.)
   final String localCsvPath;
 
@@ -21,30 +23,33 @@ class AnalyticsLogger {
   ///       'Accept': 'application/vnd.github.v3.raw',
   ///       'Authorization': 'Bearer [YOUR-TOKEN]',
   ///     },
-  ///     loggers: {
-  ///       'enableFirebase': FirebaseAnalyticsLogger(),
-  ///       'hasAppsFlyer': AppsFlyerLogger(),
-  ///       'customColumnName1': AmplitudeLogger(),
-  ///       'customColumnName2': MixpanelLogger(),
-  ///       'customColumnName3': SingularLogger(),
-  ///       'customColumnName4': DatadogDebugLogger(),
-  ///     })
+  ///    loggers: {
+  ///      FirebaseAnalyticsLogger: 'enableFirebase',
+  ///      AppsFlyerLogger: 'hasAppsFlyer',
+  ///      AmplitudeLogger: 'customizableName1',
+  ///      MixpanelLogger: 'customizableName2',
+  ///      SingularLogger: 'customizableName3',
+  ///      DatadogDebugLogger: 'customizableName4',
+  ///    },
   /// // ignore: unused_element
   /// class _CustomAnalyticsLogger {}
   /// ```
   final Map<String, String> httpHeaders;
 
   /// You can add analytics event loggers to the loggers.
-  /// - The [KEY] is the name of the column in the [CSV file]
-  /// - The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [FALSE]
+  /// - The [KEY] is the name of the logger class.
+  /// - The [VALUE] is the name of the column in the [CSV file].
+  /// - The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger.
+  /// - The value of the [COLUMN_NAME] in the CSV file should be [FALSE], [0] or [NULL] to disable the logger.
   ///
   /// ```dart
   /// @AnalyticsLogger(
   ///     localCsvPath: '<YOUR_PROJECT_ROOT/PATH_TO_CSV_FILE>',
   ///     loggers: {
   ///       // COLUMN_NAME is the name of the column in the CSV file
-  ///       // The value of the COLUMN_NAME should be 'TRUE' or 'FALSE'
-  ///       '[COLUMN_NAME]': FirebaseAnalyticsLogger(),
+  ///       // The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger.
+  ///       // The value of the [COLUMN_NAME] in the CSV file should be [FALSE], [0] or [NULL] to disable the logger.
+  ///       FirebaseAnalyticsLogger: '[COLUMN_NAME]',
   ///     })
   /// class _CustomAnalyticsLogger {}
   ///
@@ -57,12 +62,18 @@ class AnalyticsLogger {
   ///   }
   /// }
   /// ```
-  final Map<String, EventLogger> loggers;
+  final Map<Type, String> loggers;
+
+  final String providerName;
+
+  final String eventTypeName;
 
   const AnalyticsLogger({
     this.localCsvPath = '',
     this.remoteCsvUrl = '',
     this.httpHeaders = const {},
     this.loggers = const {},
+    this.providerName = 'AnalyticsEventProvider',
+    this.eventTypeName = 'AnalyticsEvent',
   });
 }
