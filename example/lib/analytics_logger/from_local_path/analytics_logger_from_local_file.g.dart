@@ -13,7 +13,7 @@ enum AnalyticsEvents {
   appEnded('app_ended', true, true, true, true, true, false),
   homeBottomButtonClicked(
       'home_bottom_button_clicked', true, true, true, true, true, true),
-  selectContents('select_contents', true, false, false, false, false, false),
+  selectContents('select_contents', true, true, false, false, false, false),
   mySendMessageClicked(
       'my_send_message_clicked', false, true, true, true, false, true),
   homeBannerButtonClicked(
