@@ -47,8 +47,8 @@ class AnalyticsLogger {
   ///     localCsvPath: '<YOUR_PROJECT_ROOT/PATH_TO_CSV_FILE>',
   ///     loggers: {
   ///       // COLUMN_NAME is the name of the column in the CSV file
-  ///       // The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger.
-  ///       // The value of the [COLUMN_NAME] in the CSV file should be [FALSE], [0] or [NULL] to disable the logger.
+  ///       // The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger,
+  ///       // and [FALSE], [0] or [NULL] to disable the logger.
   ///       FirebaseAnalyticsLogger: '[COLUMN_NAME]',
   ///     })
   /// class _CustomAnalyticsLogger {}
