@@ -107,7 +107,8 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
               'The event flag names for the \'$_eventLoggerColumnName\' in the header row ($headerRows) of the CSV file do not match those declared in the @AnalyticsLogger annotation.');
         }
 
-        int _indexOfEventLoggerName = headerRows.indexOf(_eventLoggerColumnName);
+        int _indexOfEventLoggerName =
+            headerRows.indexOf(_eventLoggerColumnName);
         String _eventFlagKey = headerRows[_indexOfEventLoggerName];
         String _eventFlag = 'false';
         if (bodyRows[i][_eventFlagKey] != null) {
@@ -207,8 +208,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       buffer.writeln('Map<String, dynamic> attributes = <String, dynamic>{');
       buffer.writeln(paramsDict);
       buffer.writeln('};');
-      buffer.writeln(
-          '$className.logEvent($_enumName.$eventName, attributes);');
+      buffer.writeln('$className.logEvent($_enumName.$eventName, attributes);');
       buffer.writeln('}');
     }
     buffer.writeln('}');
@@ -224,8 +224,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
 
     buffer.writeln('static void setup() {');
     for (String _loggerName in eventLoggerNamesDict.keys) {
-      buffer.writeln(
-          '${_loggerName.toLowerFirstCase()}.setup();');
+      buffer.writeln('${_loggerName.toLowerFirstCase()}.setup();');
     }
     buffer.writeln('}');
 
