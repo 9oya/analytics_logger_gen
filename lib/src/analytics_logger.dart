@@ -1,4 +1,3 @@
-
 /// The [AnalyticsLogger] annotation is used to generate the logger class.
 class AnalyticsLogger {
   /// When [localCsvPath] is provided, the logger and events will be
