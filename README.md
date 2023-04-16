@@ -7,10 +7,10 @@
 flutter packages pub run build_runner build
 
 # if you want to delete the generated files before building
-# > flutter packages pub run build_runner build --delete-conflicting-outputs
+flutter packages pub run build_runner build --delete-conflicting-outputs
 
-# if generated files are not updated after modifying the CSV file, run the following command
-# > flutter pub run build_runner clean
+# if generated files are not updated after modifying the CSV file
+flutter pub run build_runner clean
 ```
 ## Basic Usage
 The builders generate code when they find members annotated with `@AnalyticsLogger`.
