@@ -24,17 +24,18 @@ part 'analytics_logger.g.dart';
     remoteCsvUrl: '<URL-TO-CSV-FILE>',
     
     loggers: {
-      // COLUMN-NAME is the name of the column in the CSV file
-      // The value of the COLUMN-NAME should be 'TRUE' or 'FALSE'
-      '<COLUMN-NAME>': FirebaseAnalyticsLogger(),
+      // COLUMN_NAME is the name of the column in the CSV file
+      // The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger, 
+      // and [FALSE], [0] or [NULL] to disable the logger.
+      FirebaseAnalyticsLogger: '<COLUMN-NAME>',
     })
 // The class should be declared private '_' to avoid conflicts with the generated class
 // ignore: unused_element
-class _CustomAnalyticsLogger {}
+class _CommonAnalyticsLogger {}
 
 // You can declare any number of loggers for third-party analytics tools.
 class FirebaseAnalyticsLogger extends EventLogger {
-  const FirebaseAnalyticsLogger();
+  FirebaseAnalyticsLogger();
 
   @override
   void logEvent(String event, {required Map<String, dynamic> attributes}) {
@@ -53,7 +54,9 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
 ```
 ### CSV file
 - The indices of the `event_name` and `arguments` columns cannot be modified; they are fixed at column indices 0 and 1, respectively. (You can change their names, but not their indices.)
-- You can add any number of columns to the right of the `arguments` column. The values of the columns are used to determine whether to call the corresponding analytics tool. The values of the columns should be 'TRUE' or 'FALSE'.
+- You can add any number of columns to the right of the `arguments` column. 
+- The values of the columns are used to determine whether to call the corresponding analytics tool. 
+- The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger, and [FALSE], [0] or [NULL] to disable the logger.
 
 | event_name              | arguments              | enableFirebase | hasAppsFlyer | customColumnName1 | customColumnName2 | customColumnName3 | customColumnName4 | description |
 | -----------------------| ----------------------| -------------- | ------------ | -----------------| -----------------| -----------------| -----------------| ----------- |
@@ -66,47 +69,56 @@ AnalyticsEventsProvider.homeBottomButtonClicked(
 | my_send_message_clicked | title, message         | FALSE          | TRUE         | TRUE             | TRUE             | FALSE            | TRUE             |             |
 | home_banner_button_clicked | is_allowed           | TRUE           | TRUE         | TRUE             | TRUE             | TRUE             | TRUE             |             |
 
-[download example csv file](https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_sheet.csv)
+[download example csv file](https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_v2.csv)
 
 ### Prerequisites for running the code generation
 #### Local CSV file
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
-import '../event_loggers.dart';
+import '../event_logger_impls/event_loggers.dart';
 
-part 'analytics_logger_from_local_file.g.dart';
+part 'logger_from_local_file.g.dart';
 
-@AnalyticsLogger(localCsvPath: 'assets/logger_gen_example_sheet.csv', loggers: {
-  'enableFirebase': FirebaseAnalyticsLogger(),
-  'hasAppsFlyer': AppsFlyerLogger(),
-  'customColumnName1': AmplitudeLogger(),
-  'customColumnName2': MixpanelLogger(),
-  'customColumnName3': SingularLogger(),
-  'customColumnName4': DatadogDebugLogger(),
-})
+@AnalyticsLogger(
+    localCsvPath: 'assets/logger_gen_example_v2.csv',
+    loggers: {
+      FirebaseAnalyticsLogger: 'enableFirebase',
+      AppsFlyerLogger: 'hasAppsFlyer',
+      AmplitudeLogger: 'customizableName1',
+      MixpanelLogger: 'customizableName2',
+      SingularLogger: 'customizableName3',
+      DatadogDebugLogger: 'customizableName4',
+    },
+    providerName: 'AnalyticsEventProviderC',
+    eventTypeName: 'AnalyticsEventC')
 // ignore: unused_element
-class _CustomAnalyticsLoggerC {}
+class _CommonAnalyticsLogger {}
+
 ```
 #### Remote CSV file
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
-part 'analytics_logger_from_google_spread_sheet.g.dart';
+import '../event_logger_impls/event_loggers.dart';
+
+part 'logger_from_google_spread_sheet.g.dart';
 
 @AnalyticsLogger(
     remoteCsvUrl:
-        'https://docs.google.com/spreadsheets/d/e/2PACX-1vSwehSB_tVWzgaeVowghmaRODQdeGvriangiPy7C1ZzDcxq_j1GD7WhTH4HAlMeGTE3fs-ZZ84R45Jw/pub?gid=0&single=true&output=csv',
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vSziB4YXy4C777tDDHlW96iT-640jWsfpc0cJLCc114DWxNusSQs61EkrY5lhLcp0T1Wkj1IJWijQ-j/pub?gid=0&single=true&output=csv',
     loggers: {
-      'enableFirebase': FirebaseAnalyticsLogger(),
-      'hasAppsFlyer': AppsFlyerLogger(),
-      'customColumnName1': AmplitudeLogger(),
-      'customColumnName2': MixpanelLogger(),
-      'customColumnName3': SingularLogger(),
-      'customColumnName4': DatadogDebugLogger(),
-    })
+      FirebaseAnalyticsLogger: 'enableFirebase',
+      AppsFlyerLogger: 'hasAppsFlyer',
+      AmplitudeLogger: 'customizableName1',
+      MixpanelLogger: 'customizableName2',
+      SingularLogger: 'customizableName3',
+      DatadogDebugLogger: 'customizableName4',
+    },
+    providerName: 'AnalyticsEventProviderB',
+    eventTypeName: 'AnalyticsEventB')
 // ignore: unused_element
-class _CustomAnalyticsLoggerA {}
+class _CommonAnalyticsLogger {}
 
 class FirebaseAnalyticsLogger extends EventLogger {
   const FirebaseAnalyticsLogger();
@@ -168,13 +180,13 @@ class DatadogDebugLogger extends EventLogger {
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'analytics_logger_from_google_spread_sheet.dart';
+part 'logger_from_google_spread_sheet.g.dart';
 
 // **************************************************************************
 // AnalyticsLoggerGenerator
 // **************************************************************************
 
-enum AnalyticsEvents {
+enum AnalyticsEvent {
   appStarted('app_started', true, true, true, true, true, true),
   homePageEntered('home_page_entered', true, true, true, true, false, true),
   myPageEntered('my_page_entered', true, true, true, true, true, true),
@@ -185,50 +197,81 @@ enum AnalyticsEvents {
   mySendMessageClicked(
       'my_send_message_clicked', false, true, true, true, false, true),
   homeBannerButtonClicked(
-      'home_banner_button_clicked', true, true, true, true, true, true);
+      'home_banner_button_clicked', true, true, true, true, true, true),
+  setUserId('set_user_id', true, false, false, false, false, false),
+  setUserInfo('set_user_info', true, false, false, false, false, false),
+  countIncreased('count_increased', true, true, false, false, false, false);
 
-  const AnalyticsEvents(
+  const AnalyticsEvent(
       this.name,
       this.enableFirebase,
       this.hasAppsFlyer,
-      this.customColumnName1,
-      this.customColumnName2,
-      this.customColumnName3,
-      this.customColumnName4);
+      this.customizableName1,
+      this.customizableName2,
+      this.customizableName3,
+      this.customizableName4);
   final String name;
   final bool enableFirebase;
   final bool hasAppsFlyer;
-  final bool customColumnName1;
-  final bool customColumnName2;
-  final bool customColumnName3;
-  final bool customColumnName4;
+  final bool customizableName1;
+  final bool customizableName2;
+  final bool customizableName3;
+  final bool customizableName4;
+
+  static AnalyticsEvent fromName(String name) {
+    switch (name) {
+      case 'app_started':
+        return AnalyticsEvent.appStarted;
+      case 'home_page_entered':
+        return AnalyticsEvent.homePageEntered;
+      case 'my_page_entered':
+        return AnalyticsEvent.myPageEntered;
+      case 'app_ended':
+        return AnalyticsEvent.appEnded;
+      case 'home_bottom_button_clicked':
+        return AnalyticsEvent.homeBottomButtonClicked;
+      case 'select_contents':
+        return AnalyticsEvent.selectContents;
+      case 'my_send_message_clicked':
+        return AnalyticsEvent.mySendMessageClicked;
+      case 'home_banner_button_clicked':
+        return AnalyticsEvent.homeBannerButtonClicked;
+      case 'set_user_id':
+        return AnalyticsEvent.setUserId;
+      case 'set_user_info':
+        return AnalyticsEvent.setUserInfo;
+      case 'count_increased':
+        return AnalyticsEvent.countIncreased;
+      default:
+        throw ArgumentError('Invalid name: $name');
+    }
+  }
 }
 
-class AnalyticsEventsProvider {
-  AnalyticsEventsProvider._();
+class AnalyticsEventProvider {
+  AnalyticsEventProvider._();
   static void appStarted() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.appStarted, attributes);
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.appStarted, attributes);
   }
 
   static void homePageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CustomAnalyticsLoggerA.logEvent(
-        AnalyticsEvents.homePageEntered, attributes);
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.homePageEntered, attributes);
   }
 
   static void myPageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.myPageEntered, attributes);
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.myPageEntered, attributes);
   }
 
   static void appEnded() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.appEnded, attributes);
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.appEnded, attributes);
   }
 
   static void homeBottomButtonClicked(
@@ -239,8 +282,8 @@ class AnalyticsEventsProvider {
       'c': c,
       'd': d,
     };
-    CustomAnalyticsLoggerA.logEvent(
-        AnalyticsEvents.homeBottomButtonClicked, attributes);
+    CommonAnalyticsLogger.logEvent(
+        AnalyticsEvent.homeBottomButtonClicked, attributes);
   }
 
   static void selectContents({dynamic contentType, dynamic itemId}) {
@@ -248,7 +291,7 @@ class AnalyticsEventsProvider {
       'contentType': contentType,
       'itemId': itemId,
     };
-    CustomAnalyticsLoggerA.logEvent(AnalyticsEvents.selectContents, attributes);
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.selectContents, attributes);
   }
 
   static void mySendMessageClicked({dynamic title, dynamic message}) {
@@ -256,48 +299,80 @@ class AnalyticsEventsProvider {
       'title': title,
       'message': message,
     };
-    CustomAnalyticsLoggerA.logEvent(
-        AnalyticsEvents.mySendMessageClicked, attributes);
+    CommonAnalyticsLogger.logEvent(
+        AnalyticsEvent.mySendMessageClicked, attributes);
   }
 
   static void homeBannerButtonClicked({dynamic isAllowed}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'isAllowed': isAllowed,
     };
-    CustomAnalyticsLoggerA.logEvent(
-        AnalyticsEvents.homeBannerButtonClicked, attributes);
+    CommonAnalyticsLogger.logEvent(
+        AnalyticsEvent.homeBannerButtonClicked, attributes);
+  }
+
+  static void setUserId({dynamic id}) {
+    Map<String, dynamic> attributes = <String, dynamic>{
+      'id': id,
+    };
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.setUserId, attributes);
+  }
+
+  static void setUserInfo({dynamic age, dynamic gender}) {
+    Map<String, dynamic> attributes = <String, dynamic>{
+      'age': age,
+      'gender': gender,
+    };
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.setUserInfo, attributes);
+  }
+
+  static void countIncreased({dynamic count}) {
+    Map<String, dynamic> attributes = <String, dynamic>{
+      'count': count,
+    };
+    CommonAnalyticsLogger.logEvent(AnalyticsEvent.countIncreased, attributes);
   }
 }
 
-class CustomAnalyticsLoggerA {
-  CustomAnalyticsLoggerA._();
+class CommonAnalyticsLogger {
+  CommonAnalyticsLogger._();
   static FirebaseAnalyticsLogger firebaseAnalyticsLogger =
-      const FirebaseAnalyticsLogger();
-  static AppsFlyerLogger appsFlyerLogger = const AppsFlyerLogger();
-  static AmplitudeLogger amplitudeLogger = const AmplitudeLogger();
-  static MixpanelLogger mixpanelLogger = const MixpanelLogger();
-  static SingularLogger singularLogger = const SingularLogger();
-  static DatadogDebugLogger datadogDebugLogger = const DatadogDebugLogger();
-  static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {
+  FirebaseAnalyticsLogger();
+  static AppsFlyerLogger appsFlyerLogger = AppsFlyerLogger();
+  static AmplitudeLogger amplitudeLogger = AmplitudeLogger();
+  static MixpanelLogger mixpanelLogger = MixpanelLogger();
+  static SingularLogger singularLogger = SingularLogger();
+  static DatadogDebugLogger datadogDebugLogger = DatadogDebugLogger();
+  static void setup() {
+    firebaseAnalyticsLogger.setup();
+    appsFlyerLogger.setup();
+    amplitudeLogger.setup();
+    mixpanelLogger.setup();
+    singularLogger.setup();
+    datadogDebugLogger.setup();
+  }
+
+  static void logEvent(AnalyticsEvent event, Map<String, dynamic> attributes) {
     if (event.enableFirebase) {
       firebaseAnalyticsLogger.logEvent(event.name, attributes: attributes);
     }
     if (event.hasAppsFlyer) {
       appsFlyerLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customColumnName1) {
+    if (event.customizableName1) {
       amplitudeLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customColumnName2) {
+    if (event.customizableName2) {
       mixpanelLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customColumnName3) {
+    if (event.customizableName3) {
       singularLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customColumnName4) {
+    if (event.customizableName4) {
       datadogDebugLogger.logEvent(event.name, attributes: attributes);
     }
   }
 }
+
 
 ```

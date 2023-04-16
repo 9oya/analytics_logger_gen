@@ -1,9 +1,0 @@
-event_name,arguments,enableFirebase,hasAppsFlyer,customColumnName1,customColumnName2,customColumnName3,customColumnName4,description
-app_started,,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
-home_page_entered,ab_test_case,TRUE,TRUE,TRUE,TRUE,FALSE,TRUE,
-my_page_entered,ab_test_case,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
-app_ended,,TRUE,TRUE,TRUE,TRUE,TRUE,FALSE,
-home_bottom_button_clicked,"a, b, c, d",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
-select_contents,"content_type, item_id",TRUE,1,,,FALSE,FALSE,
-my_send_message_clicked,"title, message",FALSE,TRUE,TRUE,TRUE,FALSE,TRUE,
-home_banner_button_clicked,is_allowed,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,

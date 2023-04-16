@@ -58,7 +58,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
         Uri uri = Uri.parse(remoteCsvUrl);
         final response = await http.get(uri, headers: httpHeaders);
         if (response.statusCode == 200) {
-          allRows = const CsvToListConverter().convert<String>(response.body);
+          allRows = const CsvToListConverter().convert<dynamic>(response.body);
         } else {
           throw Exception(
               'Failed to get CSV from remote URL: $remoteCsvUrl. Status code: ${response.statusCode}');
@@ -83,14 +83,16 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
           'Failed to parse CSV. Please check the format of the CSV file. Error: $e');
     }
 
-    // enum AnalyticsEvents
-    buffer.writeln('enum AnalyticsEvents {');
+    // enum AnalyticsEvent
+    final String _enumName = annotation.read('eventTypeName').stringValue;
+    buffer.writeln('enum $_enumName {');
     final Map<String, String> eventLoggerNamesDict = annotation
         .read('loggers')
         .mapValue
         .map<String, String>((k, v) => MapEntry<String, String>(
-            k!.toStringValue()!,
-            v!.type!.getDisplayString(withNullability: false)));
+              k!.toTypeValue().toString().replaceAll('*', ''),
+              v!.toStringValue()!,
+            ));
     for (int i = 0; i < bodyRows.length; i++) {
       String? _snakeCaseEventName =
           bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
@@ -99,13 +101,13 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
 
       // Validate event flag values in a row
       List<String> _outputValues = [];
-      for (String eventLoggerName in eventLoggerNamesDict.keys) {
-        if (!headerRows.contains(eventLoggerName)) {
+      for (String _eventLoggerColumnName in eventLoggerNamesDict.values) {
+        if (!headerRows.contains(_eventLoggerColumnName)) {
           throw Exception(
-              'The event flag names for the \'$eventLoggerName\' in the header row ($headerRows) of the CSV file do not match those declared in the @AnalyticsLogger annotation.');
+              'The event flag names for the \'$_eventLoggerColumnName\' in the header row ($headerRows) of the CSV file do not match those declared in the @AnalyticsLogger annotation.');
         }
 
-        int _indexOfEventLoggerName = headerRows.indexOf(eventLoggerName);
+        int _indexOfEventLoggerName = headerRows.indexOf(_eventLoggerColumnName);
         String _eventFlagKey = headerRows[_indexOfEventLoggerName];
         String _eventFlag = 'false';
         if (bodyRows[i][_eventFlagKey] != null) {
@@ -123,7 +125,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
             }
           } catch (e) {
             throw Exception(
-                'Failed to parse the event flag value for the \'$eventLoggerName\' in the row ${i + 1} of the CSV file.');
+                'Failed to parse the event flag value for the \'$_eventLoggerColumnName\' in the row ${i + 1} of the CSV file.');
           }
         }
         _outputValues.add(_eventFlag);
@@ -143,21 +145,35 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
         buffer.writeln('$outputLine;');
       }
     }
-    buffer.writeln('const AnalyticsEvents(this.name');
-    for (String loggerSeparatorKey in eventLoggerNamesDict.keys) {
-      buffer.writeln(', this.$loggerSeparatorKey');
+    buffer.writeln('const $_enumName(this.name');
+    for (String _eventLoggerColumnName in eventLoggerNamesDict.values) {
+      buffer.writeln(', this.$_eventLoggerColumnName');
     }
     buffer.writeln(');');
 
     buffer.writeln('final String name;');
-    for (String loggerSeparatorKey in eventLoggerNamesDict.keys) {
-      buffer.writeln('final bool $loggerSeparatorKey;');
+    for (String _eventLoggerColumnName in eventLoggerNamesDict.values) {
+      buffer.writeln('final bool $_eventLoggerColumnName;');
     }
-    buffer.writeln('}');
 
-    // class AnalyticsEventsProvider
-    buffer.writeln('class AnalyticsEventsProvider {');
-    buffer.writeln('AnalyticsEventsProvider._();');
+    buffer.writeln('');
+    buffer.writeln('static $_enumName fromName(String name) {');
+    buffer.writeln('switch (name) {');
+    for (int i = 0; i < bodyRows.length; i++) {
+      String? eventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
+      buffer.writeln('case \'${bodyRows[i][headerRows[0]]}\':');
+      buffer.writeln('return $_enumName.$eventName;');
+    }
+    buffer.writeln('default:');
+    buffer.writeln('throw ArgumentError(\'Invalid name: \$name\');');
+    buffer.writeln('}'); // end of switch (name)
+    buffer.writeln('}'); // end of static AnalyticsEvent fromName(String name)
+    buffer.writeln('}'); // end of enum AnalyticsEvent
+
+    // class AnalyticsEventProvider
+    final String providerName = annotation.read('providerName').stringValue;
+    buffer.writeln('class $providerName {');
+    buffer.writeln('$providerName._();');
     for (int i = 0; i < bodyRows.length; i++) {
       String? eventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
       String params = '';
@@ -192,28 +208,34 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       buffer.writeln(paramsDict);
       buffer.writeln('};');
       buffer.writeln(
-          '$className.logEvent(AnalyticsEvents.$eventName, attributes);');
+          '$className.logEvent($_enumName.$eventName, attributes);');
       buffer.writeln('}');
     }
     buffer.writeln('}');
 
-    //class CustomAnalyticsLogger
+    //class IntegratedAnalyticsLogger
     buffer.writeln('class $className {');
     buffer.writeln('$className._();');
 
-    for (String loggerName in eventLoggerNamesDict.values) {
+    for (String _loggerName in eventLoggerNamesDict.keys) {
       buffer.writeln(
-          'static $loggerName ${loggerName.toLowerFirstCase()} = const $loggerName();');
+          'static $_loggerName ${_loggerName.toLowerFirstCase()} = $_loggerName();');
     }
 
-    buffer.writeln(
-        'static void logEvent(AnalyticsEvents event, Map<String, dynamic> attributes) {');
-
-    for (String loggerKey in eventLoggerNamesDict.keys) {
-      String loggerName = eventLoggerNamesDict[loggerKey]!;
-      buffer.writeln('if (event.$loggerKey) {');
+    buffer.writeln('static void setup() {');
+    for (String _loggerName in eventLoggerNamesDict.keys) {
       buffer.writeln(
-          '${loggerName.toLowerFirstCase()}.logEvent(event.name, attributes: attributes);');
+          '${_loggerName.toLowerFirstCase()}.setup();');
+    }
+    buffer.writeln('}');
+
+    buffer.writeln(
+        'static void logEvent($_enumName event, Map<String, dynamic> attributes) {');
+
+    for (String _loggerName in eventLoggerNamesDict.keys) {
+      buffer.writeln('if (event.${eventLoggerNamesDict[_loggerName]}) {');
+      buffer.writeln(
+          '${_loggerName.toLowerFirstCase()}.logEvent(event.name, attributes: attributes);');
       buffer.writeln('}');
     }
 
