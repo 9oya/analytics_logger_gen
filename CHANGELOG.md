@@ -1,3 +1,6 @@
+## 1.0.1
+* Update a dependency to the latest release.
+
 ## 1.0.0
 * Added support for integer values (1 and 0) and NULL values in the event logger flag value field in CSV files.
 * Added support for the event logger Type property in the @AnalyticsLogger annotation.
