@@ -31,11 +31,10 @@ part 'analytics_logger.g.dart';
     // When you declare the localCsvPath, the remoteCsvUrl is ignored.
     remoteCsvUrl: '<URL-TO-CSV-FILE>',
     
-    loggers: {
-      // The key of the map is the name of the class that implements the [EventLogger] interface.
+    loggers: <Type, String>{
+      // The key of the map is the Type of the class that implements the [EventLogger] interface.
       //
-      // The value of the [CSV-COLUMN-NAME] in the CSV file should be [TRUE] or [1] to enable the logger, 
-      // and [FALSE], [0] or [NULL] to disable the logger.
+      // Matching <CSV-COLUMN-NAME> in @AnalyticsLogger with CSV column determines which analytics tool to call for generated events.
       FirebaseAnalyticsLogger: '<CSV-COLUMN-NAME>',
     })
 // The class should be declared private '_' to avoid conflicts with the generated class
@@ -88,7 +87,7 @@ EventProvider.purchase(productId: 'product-id', price: 100, currency: 'USD', qua
 ### CSV file
 - The indices of the `event_name` and `arguments` columns cannot be modified; they are fixed at column indices 0 and 1, respectively. (You can change their names, but not their indices.)
 - You can add any number of columns to the right of the `arguments` column.
-- Matching columns in the 'loggers' Map property key of @AnalyticsLogger determine which analytics tool to call for generated events.
+- Matching columns in the 'loggers' Map property value of @AnalyticsLogger determine which analytics tool to call for generated events.
 - Use [TRUE]/[1] to enable logger, [FALSE]/[0]/[ ] to disable.
 
 | event_name            | arguments               | isFirebaseEnabled | isAppsFlyerEnabled | isAmplitudeEnabled | isMixpanelEnabled | isSingularEnabled | isDatadogEnabled | description                                  |
