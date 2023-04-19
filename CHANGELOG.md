@@ -1,3 +1,8 @@
+## 1.0.3
+* Update a dependency to the latest release.
+* Update README.md
+* Update local CSV file example to use the latest version of the package.
+
 ## 1.0.2
 * Update a dependency to the latest release.
 
