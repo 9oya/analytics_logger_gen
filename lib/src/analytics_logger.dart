@@ -72,7 +72,7 @@ class AnalyticsLogger {
     this.remoteCsvUrl = '',
     this.httpHeaders = const {},
     this.loggers = const {},
-    this.providerName = 'AnalyticsEventProvider',
-    this.eventTypeName = 'AnalyticsEvent',
+    this.providerName = 'EventProvider',
+    this.eventTypeName = 'EventType',
   });
 }

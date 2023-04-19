@@ -6,106 +6,92 @@ part of 'logger_from_local_file.dart';
 // AnalyticsLoggerGenerator
 // **************************************************************************
 
-enum AnalyticsEventC {
+enum EventTypeC {
   appStarted('app_started', true, true, true, true, true, true),
   homePageEntered('home_page_entered', true, true, true, true, false, true),
-  myPageEntered('my_page_entered', true, true, true, true, true, true),
   appEnded('app_ended', true, true, true, true, true, false),
-  homeBottomButtonClicked(
-      'home_bottom_button_clicked', true, true, true, true, true, true),
+  buttonClicked('button_clicked', true, true, true, true, true, true),
   selectContents('select_contents', true, false, false, false, false, false),
-  mySendMessageClicked(
-      'my_send_message_clicked', false, true, true, true, false, true),
-  homeBannerButtonClicked(
-      'home_banner_button_clicked', true, true, true, true, true, true),
+  sendMessage('send_message', false, true, true, true, false, true),
+  countIncreased('count_increased', true, true, true, true, true, true),
+  bannerClicked('banner_clicked', true, true, true, true, true, true),
   setUserId('set_user_id', true, false, false, false, false, false),
   setUserInfo('set_user_info', true, false, false, false, false, false),
-  countIncreased('count_increased', true, true, false, false, false, false);
+  purchase('purchase', true, false, false, false, false, false);
 
-  const AnalyticsEventC(
+  const EventTypeC(
       this.name,
-      this.enableFirebase,
-      this.hasAppsFlyer,
-      this.customizableName1,
-      this.customizableName2,
-      this.customizableName3,
-      this.customizableName4);
+      this.isFirebaseEnabled,
+      this.isAppsFlyerEnabled,
+      this.isAmplitudeEnabled,
+      this.isMixpanelEnabled,
+      this.isSingularEnabled,
+      this.isDatadogEnabled);
   final String name;
-  final bool enableFirebase;
-  final bool hasAppsFlyer;
-  final bool customizableName1;
-  final bool customizableName2;
-  final bool customizableName3;
-  final bool customizableName4;
+  final bool isFirebaseEnabled;
+  final bool isAppsFlyerEnabled;
+  final bool isAmplitudeEnabled;
+  final bool isMixpanelEnabled;
+  final bool isSingularEnabled;
+  final bool isDatadogEnabled;
 
-  static AnalyticsEventC fromName(String name) {
+  static EventTypeC fromName(String name) {
     switch (name) {
       case 'app_started':
-        return AnalyticsEventC.appStarted;
+        return EventTypeC.appStarted;
       case 'home_page_entered':
-        return AnalyticsEventC.homePageEntered;
-      case 'my_page_entered':
-        return AnalyticsEventC.myPageEntered;
+        return EventTypeC.homePageEntered;
       case 'app_ended':
-        return AnalyticsEventC.appEnded;
-      case 'home_bottom_button_clicked':
-        return AnalyticsEventC.homeBottomButtonClicked;
+        return EventTypeC.appEnded;
+      case 'button_clicked':
+        return EventTypeC.buttonClicked;
       case 'select_contents':
-        return AnalyticsEventC.selectContents;
-      case 'my_send_message_clicked':
-        return AnalyticsEventC.mySendMessageClicked;
-      case 'home_banner_button_clicked':
-        return AnalyticsEventC.homeBannerButtonClicked;
+        return EventTypeC.selectContents;
+      case 'send_message':
+        return EventTypeC.sendMessage;
+      case 'countIncreased':
+        return EventTypeC.countIncreased;
+      case 'banner_clicked':
+        return EventTypeC.bannerClicked;
       case 'set_user_id':
-        return AnalyticsEventC.setUserId;
+        return EventTypeC.setUserId;
       case 'set_user_info':
-        return AnalyticsEventC.setUserInfo;
-      case 'count_increased':
-        return AnalyticsEventC.countIncreased;
+        return EventTypeC.setUserInfo;
+      case 'purchase':
+        return EventTypeC.purchase;
       default:
         throw ArgumentError('Invalid name: $name');
     }
   }
 }
 
-class AnalyticsEventProviderC {
-  AnalyticsEventProviderC._();
-  static void appStarted() {
-    Map<String, dynamic> attributes = <String, dynamic>{};
-    IntegratedAnalyticsLoggerC.logEvent(AnalyticsEventC.appStarted, attributes);
+class EventProviderC {
+  EventProviderC._();
+  static void appStarted({dynamic title, dynamic message}) {
+    Map<String, dynamic> attributes = <String, dynamic>{
+      'title': title,
+      'message': message,
+    };
+    CommonEventLoggerC.logEvent(EventTypeC.appStarted, attributes);
   }
 
   static void homePageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.homePageEntered, attributes);
-  }
-
-  static void myPageEntered({dynamic abTestCase}) {
-    Map<String, dynamic> attributes = <String, dynamic>{
-      'abTestCase': abTestCase,
-    };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.myPageEntered, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.homePageEntered, attributes);
   }
 
   static void appEnded() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    IntegratedAnalyticsLoggerC.logEvent(AnalyticsEventC.appEnded, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.appEnded, attributes);
   }
 
-  static void homeBottomButtonClicked(
-      {dynamic a, dynamic b, dynamic c, dynamic d}) {
+  static void buttonClicked({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
-      'a': a,
-      'b': b,
-      'c': c,
-      'd': d,
+      'abTestCase': abTestCase,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.homeBottomButtonClicked, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.buttonClicked, attributes);
   }
 
   static void selectContents({dynamic contentType, dynamic itemId}) {
@@ -113,32 +99,34 @@ class AnalyticsEventProviderC {
       'contentType': contentType,
       'itemId': itemId,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.selectContents, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.selectContents, attributes);
   }
 
-  static void mySendMessageClicked({dynamic title, dynamic message}) {
+  static void sendMessage({dynamic title, dynamic message}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
       'message': message,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.mySendMessageClicked, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.sendMessage, attributes);
   }
 
-  static void homeBannerButtonClicked({dynamic isAllowed}) {
+  static void countIncreased({dynamic count}) {
     Map<String, dynamic> attributes = <String, dynamic>{
-      'isAllowed': isAllowed,
+      'count': count,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.homeBannerButtonClicked, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.countIncreased, attributes);
+  }
+
+  static void bannerClicked() {
+    Map<String, dynamic> attributes = <String, dynamic>{};
+    CommonEventLoggerC.logEvent(EventTypeC.bannerClicked, attributes);
   }
 
   static void setUserId({dynamic id}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'id': id,
     };
-    IntegratedAnalyticsLoggerC.logEvent(AnalyticsEventC.setUserId, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.setUserId, attributes);
   }
 
   static void setUserInfo({dynamic age, dynamic gender}) {
@@ -146,21 +134,23 @@ class AnalyticsEventProviderC {
       'age': age,
       'gender': gender,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.setUserInfo, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.setUserInfo, attributes);
   }
 
-  static void countIncreased({dynamic count}) {
+  static void purchase(
+      {dynamic productId, dynamic price, dynamic currency, dynamic quantity}) {
     Map<String, dynamic> attributes = <String, dynamic>{
-      'count': count,
+      'productId': productId,
+      'price': price,
+      'currency': currency,
+      'quantity': quantity,
     };
-    IntegratedAnalyticsLoggerC.logEvent(
-        AnalyticsEventC.countIncreased, attributes);
+    CommonEventLoggerC.logEvent(EventTypeC.purchase, attributes);
   }
 }
 
-class IntegratedAnalyticsLoggerC {
-  IntegratedAnalyticsLoggerC._();
+class CommonEventLoggerC {
+  CommonEventLoggerC._();
   static FirebaseAnalyticsLogger firebaseAnalyticsLogger =
       FirebaseAnalyticsLogger();
   static AppsFlyerLogger appsFlyerLogger = AppsFlyerLogger();
@@ -177,23 +167,23 @@ class IntegratedAnalyticsLoggerC {
     datadogDebugLogger.setup();
   }
 
-  static void logEvent(AnalyticsEventC event, Map<String, dynamic> attributes) {
-    if (event.enableFirebase) {
+  static void logEvent(EventTypeC event, Map<String, dynamic> attributes) {
+    if (event.isFirebaseEnabled) {
       firebaseAnalyticsLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.hasAppsFlyer) {
+    if (event.isAppsFlyerEnabled) {
       appsFlyerLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customizableName1) {
+    if (event.isAmplitudeEnabled) {
       amplitudeLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customizableName2) {
+    if (event.isMixpanelEnabled) {
       mixpanelLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customizableName3) {
+    if (event.isSingularEnabled) {
       singularLogger.logEvent(event.name, attributes: attributes);
     }
-    if (event.customizableName4) {
+    if (event.isDatadogEnabled) {
       datadogDebugLogger.logEvent(event.name, attributes: attributes);
     }
   }

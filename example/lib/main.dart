@@ -9,15 +9,17 @@ import '../event_logger_impls/event_loggers.dart';
 part 'main.g.dart';
 
 @AnalyticsLogger(
-    localCsvPath: 'assets/logger_gen_example_v2.csv',
+    localCsvPath: 'assets/logger_gen_example_v3.csv',
     loggers: {
-      FirebaseAnalyticsLogger: 'enableFirebase',
-      AppsFlyerLogger: 'hasAppsFlyer',
-      AmplitudeLogger: 'customizableName1',
-      MixpanelLogger: 'customizableName2',
-      SingularLogger: 'customizableName3',
-      DatadogDebugLogger: 'customizableName4',}
-)
+      FirebaseAnalyticsLogger: 'isFirebaseEnabled',
+      AppsFlyerLogger: 'isAppsFlyerEnabled',
+      AmplitudeLogger: 'isAmplitudeEnabled',
+      MixpanelLogger: 'isMixpanelEnabled',
+      SingularLogger: 'isSingularEnabled',
+      DatadogDebugLogger: 'isDatadogEnabled',
+    },
+    providerName: 'EventProvider',
+    eventTypeName: 'EventType')
 // ignore: unused_element
 class _CommonAnalyticsLogger {}
 
@@ -56,19 +58,19 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _counter++;
     });
-    AnalyticsEventProvider.countIncreased(count: _counter);
+    EventProvider.countIncreased(count: _counter);
   }
 
   @override
   void initState() {
     super.initState();
     CommonAnalyticsLogger.setup();
-    AnalyticsEventProvider.appStarted();
+    EventProvider.appStarted();
   }
 
   @override
   void dispose() {
-    AnalyticsEventProvider.appEnded();
+    EventProvider.appEnded();
     super.dispose();
   }
 
