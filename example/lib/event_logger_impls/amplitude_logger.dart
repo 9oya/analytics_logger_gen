@@ -27,11 +27,11 @@ class AmplitudeLogger extends EventLogger {
   void logEvent(String event, {required Map<String, dynamic> attributes}) {
     // Do something with the event and attributes
     _analytics.logEvent(event, eventProperties: attributes);
-    switch (AnalyticsEvent.fromName(event)) {
-      case AnalyticsEvent.setUserId:
+    switch (EventType.fromName(event)) {
+      case EventType.setUserId:
         _analytics.setUserId(attributes.values.first?.value.toString());
         break;
-      case AnalyticsEvent.setUserInfo:
+      case EventType.setUserInfo:
         _analytics.setUserProperties(attributes);
         break;
       default:

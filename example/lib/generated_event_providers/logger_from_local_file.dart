@@ -5,16 +5,16 @@ import '../event_logger_impls/event_loggers.dart';
 part 'logger_from_local_file.g.dart';
 
 @AnalyticsLogger(
-    localCsvPath: 'assets/logger_gen_example_v2.csv',
+    localCsvPath: 'assets/logger_gen_example_v3.csv',
     loggers: {
-      FirebaseAnalyticsLogger: 'enableFirebase',
-      AppsFlyerLogger: 'hasAppsFlyer',
-      AmplitudeLogger: 'customizableName1',
-      MixpanelLogger: 'customizableName2',
-      SingularLogger: 'customizableName3',
-      DatadogDebugLogger: 'customizableName4',
+          FirebaseAnalyticsLogger: 'isFirebaseEnabled',
+          AppsFlyerLogger: 'isAppsFlyerEnabled',
+          AmplitudeLogger: 'isAmplitudeEnabled',
+          MixpanelLogger: 'isMixpanelEnabled',
+          SingularLogger: 'isSingularEnabled',
+          DatadogDebugLogger: 'isDatadogEnabled',
     },
-    providerName: 'AnalyticsEventProviderC',
-    eventTypeName: 'AnalyticsEventC')
+    providerName: 'EventProviderC',
+    eventTypeName: 'EventTypeC')
 // ignore: unused_element
-class _IntegratedAnalyticsLoggerC {}
+class _CommonEventLoggerC {}
