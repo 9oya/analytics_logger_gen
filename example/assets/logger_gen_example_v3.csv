@@ -1,0 +1,12 @@
+event_name,arguments,isFirebaseEnabled,isAppsFlyerEnabled,isAmplitudeEnabled,isMixpanelEnabled,isSingularEnabled,isDatadogEnabled,description
+app_started,"title, message",TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
+home_page_entered,ab_test_case,TRUE,TRUE,TRUE,TRUE,,TRUE,
+app_ended,,TRUE,TRUE,TRUE,TRUE,TRUE,,
+button_clicked,ab_test_case,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
+select_contents,"content_type, item_id",TRUE,,,,,,
+send_message,"title, message",,TRUE,TRUE,TRUE,,TRUE,
+countIncreased,count,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
+banner_clicked,,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,
+set_user_id,id,TRUE,,,,,,
+set_user_info,"age, gender",TRUE,,,,,,
+purchase,"productId, price, currency, quantity",TRUE,,,,,,

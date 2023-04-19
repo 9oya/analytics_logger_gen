@@ -6,16 +6,16 @@ part 'logger_from_github_repo.g.dart';
 
 @AnalyticsLogger(
     remoteCsvUrl:
-        'https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_v2.csv',
+        'https://raw.githubusercontent.com/9oya/analytics_logger_gen_example_public_docs-/main/logger_gen_example_v3.csv',
     loggers: {
-      FirebaseAnalyticsLogger: 'enableFirebase',
-      AppsFlyerLogger: 'hasAppsFlyer',
-      AmplitudeLogger: 'customizableName1',
-      MixpanelLogger: 'customizableName2',
-      SingularLogger: 'customizableName3',
-      DatadogDebugLogger: 'customizableName4',
+      FirebaseAnalyticsLogger: 'isFirebaseEnabled',
+      AppsFlyerLogger: 'isAppsFlyerEnabled',
+      AmplitudeLogger: 'isAmplitudeEnabled',
+      MixpanelLogger: 'isMixpanelEnabled',
+      SingularLogger: 'isSingularEnabled',
+      DatadogDebugLogger: 'isDatadogEnabled',
     },
-    providerName: 'AnalyticsEventProviderA',
-    eventTypeName: 'AnalyticsEventA')
+    providerName: 'EventProviderA',
+    eventTypeName: 'EventTypeA')
 // ignore: unused_element
-class _IntegratedAnalyticsLoggerA {}
+class _CommonEventLoggerA {}
