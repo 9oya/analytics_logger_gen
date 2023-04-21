@@ -1,6 +1,6 @@
 name: analytics_logger_gen
-description: analytics_logger_gen is a code generator that generates an event logger for analytics tools like FirebaseAnalytics and AppsFlyer. Import events from Google Spreadsheets, remote repositories or CSV files.
-version: 1.0.4
+description: A code generator that generates an event logger for analytics tools like FirebaseAnalytics. Import events from Google Spreadsheets, remote repositories or local CSV files.
+version: 1.0.5
 homepage: https://github.com/9oya
 repository: https://github.com/9oya/analytics_logger_gen
 issue_tracker: https://github.com/9oya/analytics_logger_gen/issues
