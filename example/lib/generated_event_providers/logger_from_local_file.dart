@@ -17,4 +17,4 @@ part 'logger_from_local_file.g.dart';
     providerName: 'EventProviderC',
     eventTypeName: 'EventTypeC')
 // ignore: unused_element
-class _CommonEventLoggerC {}
+class _EventLoggerContainerC {}

@@ -18,4 +18,4 @@ part 'logger_from_github_repo.g.dart';
     providerName: 'EventProviderA',
     eventTypeName: 'EventTypeA')
 // ignore: unused_element
-class _CommonEventLoggerA {}
+class _EventLoggerContainerA {}

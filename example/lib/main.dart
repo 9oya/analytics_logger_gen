@@ -21,7 +21,7 @@ part 'main.g.dart';
     providerName: 'EventProvider',
     eventTypeName: 'EventType')
 // ignore: unused_element
-class _CommonAnalyticsLogger {}
+class _EventLoggerContainer {}
 
 void main() {
   runApp(const MyApp());
@@ -64,7 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    CommonAnalyticsLogger.setup();
+
+    // Initialize all event loggers
+    EventLoggerContainer.setup();
+
+    // or initialize each event logger individually
+    EventLoggerContainer.firebaseAnalyticsLogger.setup();
+
     EventProvider.appStarted();
   }
 
