@@ -67,6 +67,7 @@ enum EventTypeB {
 
 class EventProviderB {
   EventProviderB._();
+
   static void appStarted({dynamic title, dynamic message}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
@@ -158,6 +159,7 @@ class EventLoggerContainerB {
   static MixpanelLogger mixpanelLogger = MixpanelLogger();
   static SingularLogger singularLogger = SingularLogger();
   static DatadogDebugLogger datadogDebugLogger = DatadogDebugLogger();
+
   static void setup() {
     firebaseAnalyticsLogger.setup();
     appsFlyerLogger.setup();

@@ -1,11 +1,14 @@
 # analytics_logger_gen
 
-[analytics_logger_gen](https://github.com/9oya/analytics_logger_gen) is a code generator that generates an event logger for analytics tools like FirebaseAnalytics and AppsFlyer. Import events from Google Spreadsheets, remote repositories or CSV files.
+[analytics_logger_gen](https://github.com/9oya/analytics_logger_gen) is a code generator that generates analytics events for tools like FirebaseAnalytics. Import events from Google Spreadsheets, remote repositories or local CSV files.
 
 ## Running the generator
 ```shell
 flutter packages pub run build_runner build
 ```
+<details>
+<summary>Other useful commands</summary>
+
 ```shell
 flutter packages pub run build_runner build --delete-conflicting-outputs
 # if you want to delete the generated files before building
@@ -13,6 +16,8 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter pub run build_runner clean
 # if generated files are not updated after modifying the CSV file
 ```
+</details>
+
 ## Basic Usage
 ### Calling the generated code
 ```dart
