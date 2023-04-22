@@ -22,7 +22,7 @@ class AnalyticsLogger {
   ///       'Accept': 'application/vnd.github.v3.raw',
   ///       'Authorization': 'Bearer [YOUR-TOKEN]',
   ///     },
-  ///    loggers: {
+  ///    loggers: <Type, String>{
   ///       FirebaseAnalyticsLogger: 'isFirebaseEnabled',
   ///       AppsFlyerLogger: 'isAppsFlyerEnabled',
   ///       AmplitudeLogger: 'isAmplitudeEnabled',
@@ -48,11 +48,11 @@ class AnalyticsLogger {
   ///     // When you declare the localCsvPath, the remoteCsvUrl is ignored.
   ///     remoteCsvUrl: '<URL-TO-CSV-FILE>',
   ///
-  ///     loggers: {
+  ///     loggers: <Type, String>{
   ///       // The key of the map is the Type of the class that implements the [EventLogger] interface.
   ///       //
   ///       // Matching <CSV-COLUMN-NAME> in @AnalyticsLogger with CSV column determines which analytics tool to call for generated events.
-  ///       FirebaseAnalyticsLogger: '[COLUMN_NAME]',
+  ///       FirebaseAnalyticsLogger: '<CSV-COLUMN-NAME>',
   ///     })
   /// class _EventLoggerContainer {}
   ///

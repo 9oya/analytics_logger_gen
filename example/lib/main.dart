@@ -10,7 +10,7 @@ part 'main.g.dart';
 
 @AnalyticsLogger(
     localCsvPath: 'assets/logger_gen_example_v3.csv',
-    loggers: {
+    loggers: <Type, String>{
       FirebaseAnalyticsLogger: 'isFirebaseEnabled',
       AppsFlyerLogger: 'isAppsFlyerEnabled',
       AmplitudeLogger: 'isAmplitudeEnabled',
