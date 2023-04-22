@@ -18,4 +18,4 @@ part 'logger_from_google_spread_sheet.g.dart';
     providerName: 'EventProviderB',
     eventTypeName: 'EventTypeB')
 // ignore: unused_element
-class _CommonEventLoggerB {}
+class _EventLoggerContainerB {}

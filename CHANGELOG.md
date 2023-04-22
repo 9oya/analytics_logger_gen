@@ -1,3 +1,9 @@
+## 1.0.6
+* Support dart sdk environment for the dart applications.
+* Update README.md
+* Update example to use the latest version of the package.
+* Update description of the pubspec.yaml file.
+
 ## 1.0.5
 * Update description of the pubspec.yaml file.
 

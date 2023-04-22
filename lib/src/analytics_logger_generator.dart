@@ -83,7 +83,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
           'Failed to parse CSV. Please check the format of the CSV file. Error: $e');
     }
 
-    // enum AnalyticsEvent
+    // enum EventType
     final String _enumName = annotation.read('eventTypeName').stringValue;
     buffer.writeln('enum $_enumName {');
     final Map<String, String> eventLoggerNamesDict = annotation
@@ -171,10 +171,12 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('}'); // end of static AnalyticsEvent fromName(String name)
     buffer.writeln('}'); // end of enum AnalyticsEvent
 
-    // class AnalyticsEventProvider
+    // class EventProvider
     final String providerName = annotation.read('providerName').stringValue;
     buffer.writeln('class $providerName {');
     buffer.writeln('$providerName._();');
+    buffer.writeln('');
+
     for (int i = 0; i < bodyRows.length; i++) {
       String? eventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
       String params = '';
@@ -213,7 +215,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     }
     buffer.writeln('}');
 
-    //class IntegratedAnalyticsLogger
+    //class EventLoggerContainer
     buffer.writeln('class $className {');
     buffer.writeln('$className._();');
 
@@ -222,6 +224,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
           'static $_loggerName ${_loggerName.toLowerFirstCase()} = $_loggerName();');
     }
 
+    buffer.writeln('');
     buffer.writeln('static void setup() {');
     for (String _loggerName in eventLoggerNamesDict.keys) {
       buffer.writeln('${_loggerName.toLowerFirstCase()}.setup();');
