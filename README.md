@@ -1,11 +1,14 @@
 # analytics_logger_gen
 
-[analytics_logger_gen](https://github.com/9oya/analytics_logger_gen) is a code generator that generates an event logger for analytics tools like FirebaseAnalytics and AppsFlyer. Import events from Google Spreadsheets, remote repositories or CSV files.
+[analytics_logger_gen](https://github.com/9oya/analytics_logger_gen) is a code generator that generates analytics events for tools like FirebaseAnalytics. Import events from Google Spreadsheets, remote repositories or local CSV files.
 
 ## Running the generator
 ```shell
 flutter packages pub run build_runner build
 ```
+<details>
+<summary>Other useful commands</summary>
+
 ```shell
 flutter packages pub run build_runner build --delete-conflicting-outputs
 # if you want to delete the generated files before building
@@ -13,6 +16,8 @@ flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter pub run build_runner clean
 # if generated files are not updated after modifying the CSV file
 ```
+</details>
+
 ## Basic Usage
 ### Calling the generated code
 ```dart
@@ -39,7 +44,7 @@ part 'analytics_logger.g.dart';
     })
 // The class should be declared private '_' to avoid conflicts with the generated class
 // ignore: unused_element
-class _CommonAnalyticsLogger {}
+class _EventLoggerContainer {}
 
 // You can declare any number of loggers for third-party analytics tools.
 class FirebaseAnalyticsLogger extends EventLogger {
@@ -57,11 +62,11 @@ class FirebaseAnalyticsLogger extends EventLogger {
   void logEvent(String event, {required Map<String, dynamic> attributes}) {
     
     // Do something with the event and attributes
-    switch (AnalyticsEvent.fromName(event)) {
-      case AnalyticsEvent.setUserId:
+    switch (EventType.fromName(event)) {
+      case EventType.setUserId:
         _analytics.setUserId(id: attributes.values.first?.value.toString());
         break;
-      case AnalyticsEvent.setUserInfo:
+      case EventType.setUserInfo:
         for (final entry in attributes.entries) {
           _analytics.setUserProperty(
             name: entry.key,
@@ -128,7 +133,7 @@ part 'logger_from_local_file.g.dart';
     providerName: 'EventProvider',
     eventTypeName: 'EventType')
 // ignore: unused_element
-class _CommonEventLogger {}
+class _EventLoggerContainer {}
 ```
 #### Remote CSV file
 ```dart
@@ -152,7 +157,7 @@ part 'logger_from_google_spread_sheet.g.dart';
     providerName: 'EventProvider',
     eventTypeName: 'EventType')
 // ignore: unused_element
-class _CommonEventLogger {}
+class _EventLoggerContainer {}
 
 class FirebaseAnalyticsLogger extends EventLogger {
   FirebaseAnalyticsLogger();
@@ -286,26 +291,26 @@ class EventProvider {
       'title': title,
       'message': message,
     };
-    CommonAnalyticsLogger.logEvent(EventType.appStarted, attributes);
+    EventLoggerContainer.logEvent(EventType.appStarted, attributes);
   }
 
   static void homePageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CommonAnalyticsLogger.logEvent(EventType.homePageEntered, attributes);
+    EventLoggerContainer.logEvent(EventType.homePageEntered, attributes);
   }
 
   static void appEnded() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CommonAnalyticsLogger.logEvent(EventType.appEnded, attributes);
+    EventLoggerContainer.logEvent(EventType.appEnded, attributes);
   }
 
   static void buttonClicked({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CommonAnalyticsLogger.logEvent(EventType.buttonClicked, attributes);
+    EventLoggerContainer.logEvent(EventType.buttonClicked, attributes);
   }
 
   static void selectContents({dynamic contentType, dynamic itemId}) {
@@ -313,7 +318,7 @@ class EventProvider {
       'contentType': contentType,
       'itemId': itemId,
     };
-    CommonAnalyticsLogger.logEvent(EventType.selectContents, attributes);
+    EventLoggerContainer.logEvent(EventType.selectContents, attributes);
   }
 
   static void sendMessage({dynamic title, dynamic message}) {
@@ -321,26 +326,26 @@ class EventProvider {
       'title': title,
       'message': message,
     };
-    CommonAnalyticsLogger.logEvent(EventType.sendMessage, attributes);
+    EventLoggerContainer.logEvent(EventType.sendMessage, attributes);
   }
 
   static void countIncreased({dynamic count}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'count': count,
     };
-    CommonAnalyticsLogger.logEvent(EventType.countIncreased, attributes);
+    EventLoggerContainer.logEvent(EventType.countIncreased, attributes);
   }
 
   static void bannerClicked() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CommonAnalyticsLogger.logEvent(EventType.bannerClicked, attributes);
+    EventLoggerContainer.logEvent(EventType.bannerClicked, attributes);
   }
 
   static void setUserId({dynamic id}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'id': id,
     };
-    CommonAnalyticsLogger.logEvent(EventType.setUserId, attributes);
+    EventLoggerContainer.logEvent(EventType.setUserId, attributes);
   }
 
   static void setUserInfo({dynamic age, dynamic gender}) {
@@ -348,7 +353,7 @@ class EventProvider {
       'age': age,
       'gender': gender,
     };
-    CommonAnalyticsLogger.logEvent(EventType.setUserInfo, attributes);
+    EventLoggerContainer.logEvent(EventType.setUserInfo, attributes);
   }
 
   static void purchase(
@@ -359,12 +364,12 @@ class EventProvider {
       'currency': currency,
       'quantity': quantity,
     };
-    CommonAnalyticsLogger.logEvent(EventType.purchase, attributes);
+    EventLoggerContainer.logEvent(EventType.purchase, attributes);
   }
 }
 
-class CommonAnalyticsLogger {
-  CommonAnalyticsLogger._();
+class EventLoggerContainer {
+  EventLoggerContainer._();
   static FirebaseAnalyticsLogger firebaseAnalyticsLogger =
   FirebaseAnalyticsLogger();
   static AppsFlyerLogger appsFlyerLogger = AppsFlyerLogger();

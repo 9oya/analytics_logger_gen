@@ -67,31 +67,32 @@ enum EventTypeB {
 
 class EventProviderB {
   EventProviderB._();
+
   static void appStarted({dynamic title, dynamic message}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
       'message': message,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.appStarted, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.appStarted, attributes);
   }
 
   static void homePageEntered({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.homePageEntered, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.homePageEntered, attributes);
   }
 
   static void appEnded() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CommonEventLoggerB.logEvent(EventTypeB.appEnded, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.appEnded, attributes);
   }
 
   static void buttonClicked({dynamic abTestCase}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.buttonClicked, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.buttonClicked, attributes);
   }
 
   static void selectContents({dynamic contentType, dynamic itemId}) {
@@ -99,7 +100,7 @@ class EventProviderB {
       'contentType': contentType,
       'itemId': itemId,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.selectContents, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.selectContents, attributes);
   }
 
   static void sendMessage({dynamic title, dynamic message}) {
@@ -107,26 +108,26 @@ class EventProviderB {
       'title': title,
       'message': message,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.sendMessage, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.sendMessage, attributes);
   }
 
   static void countIncreased({dynamic count}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'count': count,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.countIncreased, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.countIncreased, attributes);
   }
 
   static void bannerClicked() {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    CommonEventLoggerB.logEvent(EventTypeB.bannerClicked, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.bannerClicked, attributes);
   }
 
   static void setUserId({dynamic id}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'id': id,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.setUserId, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.setUserId, attributes);
   }
 
   static void setUserInfo({dynamic age, dynamic gender}) {
@@ -134,7 +135,7 @@ class EventProviderB {
       'age': age,
       'gender': gender,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.setUserInfo, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.setUserInfo, attributes);
   }
 
   static void purchase(
@@ -145,12 +146,12 @@ class EventProviderB {
       'currency': currency,
       'quantity': quantity,
     };
-    CommonEventLoggerB.logEvent(EventTypeB.purchase, attributes);
+    EventLoggerContainerB.logEvent(EventTypeB.purchase, attributes);
   }
 }
 
-class CommonEventLoggerB {
-  CommonEventLoggerB._();
+class EventLoggerContainerB {
+  EventLoggerContainerB._();
   static FirebaseAnalyticsLogger firebaseAnalyticsLogger =
       FirebaseAnalyticsLogger();
   static AppsFlyerLogger appsFlyerLogger = AppsFlyerLogger();
@@ -158,6 +159,7 @@ class CommonEventLoggerB {
   static MixpanelLogger mixpanelLogger = MixpanelLogger();
   static SingularLogger singularLogger = SingularLogger();
   static DatadogDebugLogger datadogDebugLogger = DatadogDebugLogger();
+
   static void setup() {
     firebaseAnalyticsLogger.setup();
     appsFlyerLogger.setup();
