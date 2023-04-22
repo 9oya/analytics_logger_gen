@@ -23,37 +23,41 @@ class AnalyticsLogger {
   ///       'Authorization': 'Bearer [YOUR-TOKEN]',
   ///     },
   ///    loggers: {
-  ///      FirebaseAnalyticsLogger: 'enableFirebase',
-  ///      AppsFlyerLogger: 'hasAppsFlyer',
-  ///      AmplitudeLogger: 'customizableName1',
-  ///      MixpanelLogger: 'customizableName2',
-  ///      SingularLogger: 'customizableName3',
-  ///      DatadogDebugLogger: 'customizableName4',
-  ///    },
+  ///       FirebaseAnalyticsLogger: 'isFirebaseEnabled',
+  ///       AppsFlyerLogger: 'isAppsFlyerEnabled',
+  ///       AmplitudeLogger: 'isAmplitudeEnabled',
+  ///       MixpanelLogger: 'isMixpanelEnabled',
+  ///       SingularLogger: 'isSingularEnabled',
+  ///       DatadogDebugLogger: 'isDatadogEnabled',
+  ///     },
   /// // ignore: unused_element
-  /// class _CustomAnalyticsLogger {}
+  /// class _EventLoggerContainer {}
   /// ```
   final Map<String, String> httpHeaders;
 
   /// You can add analytics event loggers to the loggers.
-  /// - The [KEY] is the name of the logger class.
+  /// - The [KEY] of the map is the [Type] of the class that implements the [EventLogger] interface.
   /// - The [VALUE] is the name of the column in the [CSV file].
   /// - The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger.
-  /// - The value of the [COLUMN_NAME] in the CSV file should be [FALSE], [0] or [NULL] to disable the logger.
+  /// - The value of the [COLUMN_NAME] in the CSV file should be [FALSE], [0] or [] to disable the logger.
   ///
   /// ```dart
   /// @AnalyticsLogger(
+  ///     // ex) (from project root)assets/logger_gen_example_sheet.csv
   ///     localCsvPath: '<YOUR_PROJECT_ROOT/PATH_TO_CSV_FILE>',
+  ///     // When you declare the localCsvPath, the remoteCsvUrl is ignored.
+  ///     remoteCsvUrl: '<URL-TO-CSV-FILE>',
+  ///
   ///     loggers: {
-  ///       // COLUMN_NAME is the name of the column in the CSV file
-  ///       // The value of the [COLUMN_NAME] in the CSV file should be [TRUE] or [1] to enable the logger,
-  ///       // and [FALSE], [0] or [NULL] to disable the logger.
+  ///       // The key of the map is the Type of the class that implements the [EventLogger] interface.
+  ///       //
+  ///       // Matching <CSV-COLUMN-NAME> in @AnalyticsLogger with CSV column determines which analytics tool to call for generated events.
   ///       FirebaseAnalyticsLogger: '[COLUMN_NAME]',
   ///     })
-  /// class _CustomAnalyticsLogger {}
+  /// class _EventLoggerContainer {}
   ///
   /// class FirebaseAnalyticsLogger extends EventLogger {
-  ///   const SomeAnalyticsLogger();
+  ///   FirebaseAnalyticsLogger();
   ///
   ///   @override
   ///   void logEvent(String event, {required Map<String, dynamic> attributes}) {

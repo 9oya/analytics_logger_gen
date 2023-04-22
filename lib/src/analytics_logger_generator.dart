@@ -83,7 +83,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
           'Failed to parse CSV. Please check the format of the CSV file. Error: $e');
     }
 
-    // enum AnalyticsEvent
+    // enum EventType
     final String _enumName = annotation.read('eventTypeName').stringValue;
     buffer.writeln('enum $_enumName {');
     final Map<String, String> eventLoggerNamesDict = annotation
@@ -171,7 +171,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('}'); // end of static AnalyticsEvent fromName(String name)
     buffer.writeln('}'); // end of enum AnalyticsEvent
 
-    // class AnalyticsEventProvider
+    // class EventProvider
     final String providerName = annotation.read('providerName').stringValue;
     buffer.writeln('class $providerName {');
     buffer.writeln('$providerName._();');
@@ -213,7 +213,7 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     }
     buffer.writeln('}');
 
-    //class IntegratedAnalyticsLogger
+    //class EventLoggerContainer
     buffer.writeln('class $className {');
     buffer.writeln('$className._();');
 
