@@ -13,7 +13,7 @@ enum EventType {
   buttonClicked('button_clicked', true, true, true, true, true, true),
   selectContents('select_contents', true, false, false, false, false, false),
   sendMessage('send_message', false, true, true, true, false, true),
-  countIncreased('count_increased', true, true, true, true, true, true),
+  countIncreased('countIncreased', true, true, true, true, true, true),
   bannerClicked('banner_clicked', true, true, true, true, true, true),
   setUserId('set_user_id', true, false, false, false, false, false),
   setUserInfo('set_user_info', true, false, false, false, false, false),

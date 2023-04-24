@@ -94,10 +94,9 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
               v!.toStringValue()!,
             ));
     for (int i = 0; i < bodyRows.length; i++) {
-      String? _snakeCaseEventName =
-          bodyRows[i][headerRows[0]]!.toString().toSnakeCase();
-      String? _camelCaseEventName = _snakeCaseEventName.toCamelCase();
-      String outputLine = '$_camelCaseEventName(\'$_snakeCaseEventName\'';
+      String? _eventName = bodyRows[i][headerRows[0]]!.toString();
+      String? _camelCaseEventName = _eventName.toCamelCase();
+      String outputLine = '$_camelCaseEventName(\'$_eventName\'';
 
       // Validate event flag values in a row
       List<String> _outputValues = [];
@@ -161,9 +160,9 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('static $_enumName fromName(String name) {');
     buffer.writeln('switch (name) {');
     for (int i = 0; i < bodyRows.length; i++) {
-      String? eventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
+      String? _eventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
       buffer.writeln('case \'${bodyRows[i][headerRows[0]]}\':');
-      buffer.writeln('return $_enumName.$eventName;');
+      buffer.writeln('return $_enumName.$_eventName;');
     }
     buffer.writeln('default:');
     buffer.writeln('throw ArgumentError(\'Invalid name: \$name\');');
