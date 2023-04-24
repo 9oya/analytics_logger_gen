@@ -1,4 +1,5 @@
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:amplitude_flutter/amplitude.dart';
 
@@ -24,18 +25,21 @@ class AmplitudeLogger extends EventLogger {
   }
 
   @override
-  void logEvent(String event, {required Map<String, dynamic> attributes}) {
+  void logEvent(String event,
+      {required Map<String, dynamic> attributes, Function? onComplete}) async {
     // Do something with the event and attributes
-    _analytics.logEvent(event, eventProperties: attributes);
     switch (EventType.fromName(event)) {
       case EventType.setUserId:
-        _analytics.setUserId(attributes.values.first?.value.toString());
+        await _analytics.setUserId(attributes.values.first?.value.toString());
+        onComplete?.call();
         break;
       case EventType.setUserInfo:
-        _analytics.setUserProperties(attributes);
+        await _analytics.setUserProperties(attributes);
+        onComplete?.call();
         break;
       default:
-        _analytics.logEvent(event, eventProperties: attributes);
+        await _analytics.logEvent(event, eventProperties: attributes);
+        onComplete?.call();
     }
   }
 }

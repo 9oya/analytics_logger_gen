@@ -68,85 +68,103 @@ enum EventTypeC {
 class EventProviderC {
   EventProviderC._();
 
-  static void appStarted({dynamic title, dynamic message}) {
+  static void appStarted(
+      {dynamic title, dynamic message, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
       'message': message,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.appStarted, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.appStarted, attributes,
+        onComplete: onComplete);
   }
 
-  static void homePageEntered({dynamic abTestCase}) {
+  static void homePageEntered({dynamic abTestCase, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.homePageEntered, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.homePageEntered, attributes,
+        onComplete: onComplete);
   }
 
-  static void appEnded() {
+  static void appEnded({Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    EventLoggerContainerC.logEvent(EventTypeC.appEnded, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.appEnded, attributes,
+        onComplete: onComplete);
   }
 
-  static void buttonClicked({dynamic abTestCase}) {
+  static void buttonClicked({dynamic abTestCase, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.buttonClicked, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.buttonClicked, attributes,
+        onComplete: onComplete);
   }
 
-  static void selectContents({dynamic contentType, dynamic itemId}) {
+  static void selectContents(
+      {dynamic contentType, dynamic itemId, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'contentType': contentType,
       'itemId': itemId,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.selectContents, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.selectContents, attributes,
+        onComplete: onComplete);
   }
 
-  static void sendMessage({dynamic title, dynamic message}) {
+  static void sendMessage(
+      {dynamic title, dynamic message, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
       'message': message,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.sendMessage, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.sendMessage, attributes,
+        onComplete: onComplete);
   }
 
-  static void countIncreased({dynamic count}) {
+  static void countIncreased({dynamic count, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'count': count,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.countIncreased, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.countIncreased, attributes,
+        onComplete: onComplete);
   }
 
-  static void bannerClicked() {
+  static void bannerClicked({Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    EventLoggerContainerC.logEvent(EventTypeC.bannerClicked, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.bannerClicked, attributes,
+        onComplete: onComplete);
   }
 
-  static void setUserId({dynamic id}) {
+  static void setUserId({dynamic id, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'id': id,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.setUserId, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.setUserId, attributes,
+        onComplete: onComplete);
   }
 
-  static void setUserInfo({dynamic age, dynamic gender}) {
+  static void setUserInfo({dynamic age, dynamic gender, Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'age': age,
       'gender': gender,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.setUserInfo, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.setUserInfo, attributes,
+        onComplete: onComplete);
   }
 
   static void purchase(
-      {dynamic productId, dynamic price, dynamic currency, dynamic quantity}) {
+      {dynamic productId,
+      dynamic price,
+      dynamic currency,
+      dynamic quantity,
+      Function? onComplete}) {
     Map<String, dynamic> attributes = <String, dynamic>{
       'productId': productId,
       'price': price,
       'currency': currency,
       'quantity': quantity,
     };
-    EventLoggerContainerC.logEvent(EventTypeC.purchase, attributes);
+    EventLoggerContainerC.logEvent(EventTypeC.purchase, attributes,
+        onComplete: onComplete);
   }
 }
 
@@ -169,24 +187,31 @@ class EventLoggerContainerC {
     datadogDebugLogger.setup();
   }
 
-  static void logEvent(EventTypeC event, Map<String, dynamic> attributes) {
+  static void logEvent(EventTypeC event, Map<String, dynamic> attributes,
+      {Function? onComplete}) {
     if (event.isFirebaseEnabled) {
-      firebaseAnalyticsLogger.logEvent(event.name, attributes: attributes);
+      firebaseAnalyticsLogger.logEvent(event.name,
+          attributes: attributes, onComplete: onComplete);
     }
     if (event.isAppsFlyerEnabled) {
-      appsFlyerLogger.logEvent(event.name, attributes: attributes);
+      appsFlyerLogger.logEvent(event.name,
+          attributes: attributes, onComplete: onComplete);
     }
     if (event.isAmplitudeEnabled) {
-      amplitudeLogger.logEvent(event.name, attributes: attributes);
+      amplitudeLogger.logEvent(event.name,
+          attributes: attributes, onComplete: onComplete);
     }
     if (event.isMixpanelEnabled) {
-      mixpanelLogger.logEvent(event.name, attributes: attributes);
+      mixpanelLogger.logEvent(event.name,
+          attributes: attributes, onComplete: onComplete);
     }
     if (event.isSingularEnabled) {
-      singularLogger.logEvent(event.name, attributes: attributes);
+      singularLogger.logEvent(event.name,
+          attributes: attributes, onComplete: onComplete);
     }
     if (event.isDatadogEnabled) {
-      datadogDebugLogger.logEvent(event.name, attributes: attributes);
+      datadogDebugLogger.logEvent(event.name,
+          attributes: attributes, onComplete: onComplete);
     }
   }
 }
