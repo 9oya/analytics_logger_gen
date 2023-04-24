@@ -1,3 +1,7 @@
+## 1.1.0
+* Support completion call back to the EventLogger interface.
+* Fix the issue where event names were being forced to snake case.
+
 ## 1.0.6
 * Support dart sdk environment for the dart applications.
 * Update README.md
