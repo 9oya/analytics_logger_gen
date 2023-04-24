@@ -4,7 +4,8 @@ class SingularLogger extends EventLogger {
   SingularLogger();
 
   @override
-  void logEvent(String event, {required Map<String, dynamic> attributes}) {
+  void logEvent(String event,
+      {required Map<String, dynamic> attributes, Function? onComplete}) {
     // Do something with the event and attributes
   }
 }
