@@ -12,7 +12,8 @@ class AppsFlyerLogger extends EventLogger {
       timeToWaitForATTUserAuthorization: 15));
 
   @override
-  void logEvent(String event, {required Map<String, dynamic> attributes}) {
+  void logEvent(String event,
+      {required Map<String, dynamic> attributes, Function? onComplete}) {
     _appsflyerSdk.logEvent(event, attributes);
   }
 }
