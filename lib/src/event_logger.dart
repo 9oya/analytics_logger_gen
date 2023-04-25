@@ -2,7 +2,8 @@
 abstract class EventLogger {
   const EventLogger();
 
-  Future<void> logEvent(String event, {required Map<String, dynamic> attributes});
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes});
 
   void setup() {}
 }
