@@ -1,3 +1,6 @@
+## 1.1.1
+* Fix static analysis warnings by the dart formatter.
+
 ## 1.1.0
 * Support completion call back to the EventLogger interface.
 * Fix the issue where event names were being forced to snake case.
