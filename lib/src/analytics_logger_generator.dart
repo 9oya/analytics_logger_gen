@@ -199,20 +199,22 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
           break;
         }
         _params += 'dynamic $_camelCaseParamName';
-        _params += ', ';
+        if (j < args.length - 1) {
+          _params += ', ';
+        } else {
+          _params += '}';
+        }
 
         _paramsDict += '\'$_camelCaseParamName\': $_camelCaseParamName,';
       }
-      if (_params.isEmpty) {
-        _params = '{';
-      }
+
       buffer.writeln(
-          'static void $_camelCaseEventName(${_params}Function? onComplete}) {');
+          'static Future<void> $_camelCaseEventName($_params) async {');
       buffer.writeln('Map<String, dynamic> attributes = <String, dynamic>{');
       buffer.writeln(_paramsDict);
       buffer.writeln('};');
       buffer.writeln(
-          '$className.logEvent($_enumName.$_camelCaseEventName, attributes, onComplete: onComplete);');
+          'await $className.logEvent($_enumName.$_camelCaseEventName, attributes);');
       buffer.writeln('}');
     }
     buffer.writeln('}');
@@ -234,12 +236,12 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('}');
 
     buffer.writeln(
-        'static void logEvent($_enumName event, Map<String, dynamic> attributes, {Function? onComplete}) {');
+        'static Future<void> logEvent($_enumName event, Map<String, dynamic> attributes) async {');
 
     for (String _loggerName in eventLoggerNamesDict.keys) {
       buffer.writeln('if (event.${eventLoggerNamesDict[_loggerName]}) {');
       buffer.writeln(
-          '${_loggerName.toLowerFirstCase()}.logEvent(event.name, attributes: attributes, onComplete: onComplete);');
+          'await ${_loggerName.toLowerFirstCase()}.logEvent(event.name, attributes: attributes);');
       buffer.writeln('}');
     }
 
