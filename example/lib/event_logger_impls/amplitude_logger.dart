@@ -25,21 +25,18 @@ class AmplitudeLogger extends EventLogger {
   }
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) async {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // Do something with the event and attributes
     switch (EventType.fromName(event)) {
       case EventType.setUserId:
         await _analytics.setUserId(attributes.values.first?.value.toString());
-        onComplete?.call();
         break;
       case EventType.setUserInfo:
         await _analytics.setUserProperties(attributes);
-        onComplete?.call();
         break;
       default:
         await _analytics.logEvent(event, eventProperties: attributes);
-        onComplete?.call();
     }
   }
 }
