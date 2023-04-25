@@ -20,13 +20,12 @@ class FirebaseAnalyticsLogger extends EventLogger {
   }
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) async {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // switch (EventType.fromName(event)) {
     //   case EventType.setUserId:
     //     await _analytics.setUserId(
     //         id: attributes.values.first?.value.toString());
-    //     onComplete?.call();
     //     break;
     //   case EventType.setUserInfo:
     //     for (final entry in attributes.entries) {
@@ -35,11 +34,9 @@ class FirebaseAnalyticsLogger extends EventLogger {
     //         value: entry.value,
     //       );
     //     }
-    //     onComplete?.call();
     //     break;
     //   default:
     //     await _analytics.logEvent(name: event, parameters: attributes);
-    //     onComplete?.call();
     // }
   }
 }

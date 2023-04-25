@@ -58,14 +58,13 @@ class FirebaseAnalyticsLogger extends EventLogger {
     super.setup();
   }
 
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) async {
-    // Do something with the event and attributes
+  @override
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     switch (EventType.fromName(event)) {
       case EventType.setUserId:
         await _analytics.setUserId(
             id: attributes.values.first?.value.toString());
-        onComplete?.call();
         break;
       case EventType.setUserInfo:
         for (final entry in attributes.entries) {
@@ -74,12 +73,11 @@ class FirebaseAnalyticsLogger extends EventLogger {
             value: entry.value,
           );
         }
-        onComplete?.call();
         break;
       default:
         await _analytics.logEvent(name: event, parameters: attributes);
-        onComplete?.call();
     }
+  }}
   }
 }
 ```
@@ -166,8 +164,8 @@ class FirebaseAnalyticsLogger extends EventLogger {
   FirebaseAnalyticsLogger();
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // Do something with the event and attributes
   }
 }
@@ -176,8 +174,8 @@ class AppsFlyerLogger extends EventLogger {
   AppsFlyerLogger();
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // Do something with the event and attributes
   }
 }
@@ -196,8 +194,8 @@ class MixpanelLogger extends EventLogger {
   MixpanelLogger();
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // Do something with the event and attributes
   }
 }
@@ -206,8 +204,8 @@ class SingularLogger extends EventLogger {
   SingularLogger();
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // Do something with the event and attributes
   }
 }
@@ -216,8 +214,8 @@ class DatadogDebugLogger extends EventLogger {
   DatadogDebugLogger();
 
   @override
-  void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) {
+  Future<void> logEvent(String event,
+      {required Map<String, dynamic> attributes}) async {
     // Do something with the event and attributes
   }
 }
@@ -296,103 +294,89 @@ enum EventType {
 class EventProvider {
   EventProvider._();
 
-  static void appStarted(
-      {dynamic title, dynamic message, Function? onComplete}) {
+  static Future<void> appStarted({dynamic title, dynamic message}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
       'message': message,
     };
-    EventLoggerContainer.logEvent(EventType.appStarted, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.appStarted, attributes);
   }
 
-  static void homePageEntered({dynamic abTestCase, Function? onComplete}) {
+  static Future<void> homePageEntered({dynamic abTestCase}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    EventLoggerContainer.logEvent(EventType.homePageEntered, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.homePageEntered, attributes);
   }
 
-  static void appEnded({Function? onComplete}) {
+  static Future<void> appEnded() async {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    EventLoggerContainer.logEvent(EventType.appEnded, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.appEnded, attributes);
   }
 
-  static void buttonClicked({dynamic abTestCase, Function? onComplete}) {
+  static Future<void> buttonClicked({dynamic abTestCase}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'abTestCase': abTestCase,
     };
-    EventLoggerContainer.logEvent(EventType.buttonClicked, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.buttonClicked, attributes);
   }
 
-  static void selectContents(
-      {dynamic contentType, dynamic itemId, Function? onComplete}) {
+  static Future<void> selectContents(
+      {dynamic contentType, dynamic itemId}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'contentType': contentType,
       'itemId': itemId,
     };
-    EventLoggerContainer.logEvent(EventType.selectContents, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.selectContents, attributes);
   }
 
-  static void sendMessage(
-      {dynamic title, dynamic message, Function? onComplete}) {
+  static Future<void> sendMessage({dynamic title, dynamic message}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'title': title,
       'message': message,
     };
-    EventLoggerContainer.logEvent(EventType.sendMessage, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.sendMessage, attributes);
   }
 
-  static void countIncreased({dynamic count, Function? onComplete}) {
+  static Future<void> countIncreased({dynamic count}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'count': count,
     };
-    EventLoggerContainer.logEvent(EventType.countIncreased, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.countIncreased, attributes);
   }
 
-  static void bannerClicked({Function? onComplete}) {
+  static Future<void> bannerClicked() async {
     Map<String, dynamic> attributes = <String, dynamic>{};
-    EventLoggerContainer.logEvent(EventType.bannerClicked, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.bannerClicked, attributes);
   }
 
-  static void setUserId({dynamic id, Function? onComplete}) {
+  static Future<void> setUserId({dynamic id}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'id': id,
     };
-    EventLoggerContainer.logEvent(EventType.setUserId, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.setUserId, attributes);
   }
 
-  static void setUserInfo({dynamic age, dynamic gender, Function? onComplete}) {
+  static Future<void> setUserInfo({dynamic age, dynamic gender}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'age': age,
       'gender': gender,
     };
-    EventLoggerContainer.logEvent(EventType.setUserInfo, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.setUserInfo, attributes);
   }
 
-  static void purchase(
+  static Future<void> purchase(
       {dynamic productId,
         dynamic price,
         dynamic currency,
-        dynamic quantity,
-        Function? onComplete}) {
+        dynamic quantity}) async {
     Map<String, dynamic> attributes = <String, dynamic>{
       'productId': productId,
       'price': price,
       'currency': currency,
       'quantity': quantity,
     };
-    EventLoggerContainer.logEvent(EventType.purchase, attributes,
-        onComplete: onComplete);
+    await EventLoggerContainer.logEvent(EventType.purchase, attributes);
   }
 }
 
@@ -415,31 +399,26 @@ class EventLoggerContainer {
     datadogDebugLogger.setup();
   }
 
-  static void logEvent(EventType event, Map<String, dynamic> attributes,
-      {Function? onComplete}) {
+  static Future<void> logEvent(
+      EventType event, Map<String, dynamic> attributes) async {
     if (event.isFirebaseEnabled) {
-      firebaseAnalyticsLogger.logEvent(event.name,
-          attributes: attributes, onComplete: onComplete);
+      await firebaseAnalyticsLogger.logEvent(event.name,
+          attributes: attributes);
     }
     if (event.isAppsFlyerEnabled) {
-      appsFlyerLogger.logEvent(event.name,
-          attributes: attributes, onComplete: onComplete);
+      await appsFlyerLogger.logEvent(event.name, attributes: attributes);
     }
     if (event.isAmplitudeEnabled) {
-      amplitudeLogger.logEvent(event.name,
-          attributes: attributes, onComplete: onComplete);
+      await amplitudeLogger.logEvent(event.name, attributes: attributes);
     }
     if (event.isMixpanelEnabled) {
-      mixpanelLogger.logEvent(event.name,
-          attributes: attributes, onComplete: onComplete);
+      await mixpanelLogger.logEvent(event.name, attributes: attributes);
     }
     if (event.isSingularEnabled) {
-      singularLogger.logEvent(event.name,
-          attributes: attributes, onComplete: onComplete);
+      await singularLogger.logEvent(event.name, attributes: attributes);
     }
     if (event.isDatadogEnabled) {
-      datadogDebugLogger.logEvent(event.name,
-          attributes: attributes, onComplete: onComplete);
+      await datadogDebugLogger.logEvent(event.name, attributes: attributes);
     }
   }
 }
