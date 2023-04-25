@@ -160,7 +160,8 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('static $_enumName fromName(String name) {');
     buffer.writeln('switch (name) {');
     for (int i = 0; i < bodyRows.length; i++) {
-      String? _camelCaseEventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
+      String? _camelCaseEventName =
+          bodyRows[i][headerRows[0]]!.toString().toCamelCase();
       buffer.writeln('case \'${bodyRows[i][headerRows[0]]}\':');
       buffer.writeln('return $_enumName.$_camelCaseEventName;');
     }
@@ -177,7 +178,8 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     buffer.writeln('');
 
     for (int i = 0; i < bodyRows.length; i++) {
-      String? _camelCaseEventName = bodyRows[i][headerRows[0]]!.toString().toCamelCase();
+      String? _camelCaseEventName =
+          bodyRows[i][headerRows[0]]!.toString().toCamelCase();
       String _params = '';
       String _paramsDict = '';
 
@@ -204,11 +206,13 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
       if (_params.isEmpty) {
         _params = '{';
       }
-      buffer.writeln('static void $_camelCaseEventName(${_params}Function? onComplete}) {');
+      buffer.writeln(
+          'static void $_camelCaseEventName(${_params}Function? onComplete}) {');
       buffer.writeln('Map<String, dynamic> attributes = <String, dynamic>{');
       buffer.writeln(_paramsDict);
       buffer.writeln('};');
-      buffer.writeln('$className.logEvent($_enumName.$_camelCaseEventName, attributes, onComplete: onComplete);');
+      buffer.writeln(
+          '$className.logEvent($_enumName.$_camelCaseEventName, attributes, onComplete: onComplete);');
       buffer.writeln('}');
     }
     buffer.writeln('}');
