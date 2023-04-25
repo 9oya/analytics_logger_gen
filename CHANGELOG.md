@@ -1,3 +1,6 @@
+## 1.2.1
+* Fix static analysis warnings by the dart formatter.
+
 ## 1.2.0
 * Remove the completion callback from the EventLogger interface.
 * Add Future return type to the logEvent method in the generated EventContainer and EventProvider.
