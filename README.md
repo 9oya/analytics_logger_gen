@@ -185,7 +185,7 @@ class AmplitudeLogger extends EventLogger {
 
   @override
   void logEvent(String event,
-      {required Map<String, dynamic> attributes, Function? onComplete}) {
+      {required Map<String, dynamic> attributes}) {
     // Do something with the event and attributes
   }
 }
