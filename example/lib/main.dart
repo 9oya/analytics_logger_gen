@@ -54,12 +54,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  Future<void> _incrementCounter() async {
+  void _incrementCounter() {
     setState(() {
       _counter++;
     });
-    await EventProvider.countIncreased(count: _counter);
-    EventProvider.homePageEntered();
+    EventProvider.countIncreased(count: _counter);
   }
 
   @override
