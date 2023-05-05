@@ -1,3 +1,8 @@
+## 1.3.0
+* Add Future return type to the setup method to the EventLogger interface.
+* Update README.md
+* Update example
+
 ## 1.2.1
 * Fix static analysis warnings by the dart formatter.
 
