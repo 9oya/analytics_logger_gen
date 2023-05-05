@@ -62,14 +62,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
 
     // Initialize all event loggers
-    EventLoggerContainer.setup();
+    await EventLoggerContainer.setup();
 
     // or initialize each event logger individually
-    EventLoggerContainer.firebaseAnalyticsLogger.setup();
+    await EventLoggerContainer.firebaseAnalyticsLogger.setup();
 
     EventProvider.appStarted();
   }

@@ -164,13 +164,13 @@ class EventLoggerContainer {
   static SingularLogger singularLogger = SingularLogger();
   static DatadogDebugLogger datadogDebugLogger = DatadogDebugLogger();
 
-  static void setup() {
-    firebaseAnalyticsLogger.setup();
-    appsFlyerLogger.setup();
-    amplitudeLogger.setup();
-    mixpanelLogger.setup();
-    singularLogger.setup();
-    datadogDebugLogger.setup();
+  static Future<void> setup() async {
+    await firebaseAnalyticsLogger.setup();
+    await appsFlyerLogger.setup();
+    await amplitudeLogger.setup();
+    await mixpanelLogger.setup();
+    await singularLogger.setup();
+    await datadogDebugLogger.setup();
   }
 
   static Future<void> logEvent(
