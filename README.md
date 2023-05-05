@@ -18,12 +18,16 @@ flutter pub run build_runner clean
 ```
 </details>
 
-## Basic Usage
-### Calling the generated code
+## Calling the generated code
+You can call the generated code from anywhere in your project with `Future` type methods.
 ```dart
+await EventProvider.setup();
+
 EventProvider.appStarted(title: 'Hello', message: 'world');
 ```
-### The builders generate code when they find members annotated with `@AnalyticsLogger`.
+
+## Annotation based code generation
+The builders generate code when they find members annotated with `@AnalyticsLogger`.
 ```dart
 import 'package:analytics_logger_gen/analytics_logger_gen.dart';
 
@@ -81,7 +85,7 @@ class FirebaseAnalyticsLogger extends EventLogger {
   }
 }
 ```
-## Example
+## Examples
 ### Calling the generated code
 ```dart
 EventProvider.appStarted();
@@ -184,7 +188,7 @@ class AmplitudeLogger extends EventLogger {
   AmplitudeLogger();
 
   @override
-  void logEvent(String event,
+  Future<void> logEvent(String event,
       {required Map<String, dynamic> attributes}) {
     // Do something with the event and attributes
   }
@@ -390,13 +394,13 @@ class EventLoggerContainer {
   static SingularLogger singularLogger = SingularLogger();
   static DatadogDebugLogger datadogDebugLogger = DatadogDebugLogger();
 
-  static void setup() {
-    firebaseAnalyticsLogger.setup();
-    appsFlyerLogger.setup();
-    amplitudeLogger.setup();
-    mixpanelLogger.setup();
-    singularLogger.setup();
-    datadogDebugLogger.setup();
+  static Future<void> setup() async {
+    await firebaseAnalyticsLogger.setup();
+    await appsFlyerLogger.setup();
+    await amplitudeLogger.setup();
+    await mixpanelLogger.setup();
+    await singularLogger.setup();
+    await datadogDebugLogger.setup();
   }
 
   static Future<void> logEvent(

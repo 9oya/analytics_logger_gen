@@ -11,17 +11,17 @@ class AmplitudeLogger extends EventLogger {
   final _analytics = Amplitude.getInstance(instanceName: "project");
 
   @override
-  void setup() {
-    _analytics.setUseDynamicConfig(true);
-    _analytics.setServerUrl("https://api2.amplitude.com");
-    _analytics.init("API_KEY");
-    _analytics.enableCoppaControl();
-    _analytics.setUserId("test_user", startNewSession: true);
-    _analytics.trackingSessionEvents(true);
-    _analytics.setMinTimeBetweenSessionsMillis(5000);
-    _analytics.setEventUploadThreshold(5);
-    _analytics.setEventUploadPeriodMillis(30000);
-    _analytics.setServerZone("US");
+  Future<void> setup() async {
+    await _analytics.setUseDynamicConfig(true);
+    await _analytics.setServerUrl("https://api2.amplitude.com");
+    await _analytics.init("API_KEY");
+    await _analytics.enableCoppaControl();
+    await _analytics.setUserId("test_user", startNewSession: true);
+    await _analytics.trackingSessionEvents(true);
+    await _analytics.setMinTimeBetweenSessionsMillis(5000);
+    await _analytics.setEventUploadThreshold(5);
+    await _analytics.setEventUploadPeriodMillis(30000);
+    await _analytics.setServerZone("US");
   }
 
   @override
