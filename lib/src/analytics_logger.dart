@@ -67,8 +67,10 @@ class AnalyticsLogger {
   /// ```
   final Map<Type, String> loggers;
 
+  /// The [providerName] is used to generate the event provider class.
   final String providerName;
 
+  /// The [eventTypeName] is used to generate the event type enum.
   final String eventTypeName;
 
   const AnalyticsLogger({

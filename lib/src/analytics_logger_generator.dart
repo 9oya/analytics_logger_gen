@@ -229,9 +229,9 @@ class AnalyticsLoggerGenerator extends GeneratorForAnnotation<AnalyticsLogger> {
     }
 
     buffer.writeln('');
-    buffer.writeln('static void setup() {');
+    buffer.writeln('static Future<void> setup() async {');
     for (String _loggerName in eventLoggerNamesDict.keys) {
-      buffer.writeln('${_loggerName.toLowerFirstCase()}.setup();');
+      buffer.writeln('await ${_loggerName.toLowerFirstCase()}.setup();');
     }
     buffer.writeln('}');
 
