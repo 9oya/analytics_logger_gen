@@ -1,3 +1,6 @@
+## 1.3.1
+* Update a dependency to the latest release.
+
 ## 1.3.0
 * Add Future return type to the setup method to the EventLogger interface.
 * Update README.md
