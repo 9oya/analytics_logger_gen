@@ -6,7 +6,7 @@ description: Demonstrates how to use the analytics_logger_gen plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.18.6 <3.0.0'
+  sdk: '>=2.18.6 <4.0.0'
 
 dependencies:
   analytics_logger_gen:
