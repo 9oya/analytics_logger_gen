@@ -4,16 +4,16 @@
 
 ## Running the generator
 ```shell
-flutter packages pub run build_runner build
+dart pub run build_runner build
 ```
 <details>
 <summary>Other useful commands</summary>
 
 ```shell
-flutter packages pub run build_runner build --delete-conflicting-outputs
+dart pub run build_runner build --delete-conflicting-outputs
 # if you want to delete the generated files before building
 
-flutter pub run build_runner clean
+dart pub run build_runner clean
 # if generated files are not updated after modifying the CSV file
 ```
 </details>
