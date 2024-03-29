@@ -24,7 +24,7 @@ dev_dependencies:
   amplitude_flutter: ^3.14.0
   mixpanel_flutter: ^2.1.1
   singular_flutter_sdk: ^1.0.13
-  datadog_flutter: ^2.0.0
+  datadog_flutter_plugin: '>=1.0.0 <3.0.0'
 
 flutter:
   uses-material-design: true
