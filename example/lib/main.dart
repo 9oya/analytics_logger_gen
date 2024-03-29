@@ -62,9 +62,15 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _asyncMethod();
+    });
+  }
+
+  _asyncMethod() async {
     // Initialize all event loggers
     await EventLoggerContainer.setup();
 

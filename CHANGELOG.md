@@ -1,3 +1,8 @@
+## 1.3.3
+* Update a dependency to the latest release.
+* Update example to use the latest version of the package.
+* Fixing async method calls in initState: example project
+
 ## 1.3.2
 * Update a dependency to the latest release.
 * Update README.md
